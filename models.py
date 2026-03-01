@@ -97,5 +97,35 @@ class QuizRequest(BaseModel):
     document_ids: Optional[List[str]] = []
 
 class QuizResponse(BaseModel):
+    quiz_id: str                  # ID để lưu session
     questions: List[QuizQuestion]
     topic: str
+    difficulty: str
+    created_at: datetime = Field(default_factory=datetime.now)
+
+# ── Mới: lưu kết quả từng câu trả lời ──────────────────────────────
+class QuizAnswerRecord(BaseModel):
+    question_index: int
+    question: str
+    options: List[str]
+    correct_answer: int
+    user_answer: int              # index học sinh chọn
+    is_correct: bool
+    explanation: str
+
+class QuizResultSubmit(BaseModel):
+    quiz_id: str
+    topic: str
+    difficulty: str
+    answers: List[QuizAnswerRecord]
+
+class QuizResult(BaseModel):
+    id: str                       # result ID
+    quiz_id: str
+    topic: str
+    difficulty: str
+    total_questions: int
+    correct_count: int
+    score: float                  # 0–100
+    answers: List[QuizAnswerRecord]
+    completed_at: datetime = Field(default_factory=datetime.now)

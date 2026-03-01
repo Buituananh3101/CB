@@ -569,10 +569,352 @@
             margin-bottom: 16px;
         }
 
-        .quiz-q { font-weight: 500; margin-bottom: 12px; font-size: 14px; }
-        .quiz-option { padding: 8px 12px; border-radius: 6px; font-size: 13px; margin-bottom: 6px; }
-        .quiz-answer { background: rgba(74,222,128,0.12); color: var(--green); border: 1px solid rgba(74,222,128,0.3); }
-        .quiz-explanation { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-muted); }
+        /* ===== QUIZ ENGINE ===== */
+
+        /* Setup screen */
+        .quiz-setup { max-width: 560px; }
+        .quiz-setup h2 { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+        .quiz-setup p  { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+
+        /* Progress bar */
+        .quiz-progress-wrap {
+            padding: 16px 28px 0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .quiz-progress-bar {
+            flex: 1;
+            height: 5px;
+            background: var(--border);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+        .quiz-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 99px;
+            transition: width 0.4s cubic-bezier(.4,0,.2,1);
+        }
+        .quiz-progress-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* Question card */
+        .quiz-card-wrap {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .quiz-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .quiz-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .quiz-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 99px;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        .quiz-badge.easy   { border-color: #4ade80; color: #4ade80; }
+        .quiz-badge.medium { border-color: #facc15; color: #facc15; }
+        .quiz-badge.hard   { border-color: #f87171; color: #f87171; }
+
+        .quiz-question-text {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Option buttons */
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+
+        .quiz-opt-btn {
+            width: 100%;
+            padding: 13px 16px;
+            background: var(--surface2);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: border-color 0.2s, background 0.2s, transform 0.1s;
+            line-height: 1.4;
+        }
+
+        .quiz-opt-btn:hover:not(:disabled) {
+            border-color: var(--accent);
+            background: rgba(108,143,255,0.08);
+            transform: translateX(3px);
+        }
+
+        .quiz-opt-btn:disabled { cursor: default; transform: none; }
+
+        .quiz-opt-btn.correct {
+            border-color: var(--green);
+            background: rgba(74,222,128,0.1);
+            color: var(--green);
+        }
+
+        .quiz-opt-btn.wrong {
+            border-color: var(--danger);
+            background: rgba(248,113,113,0.1);
+            color: var(--danger);
+        }
+
+        .quiz-opt-btn.reveal {
+            border-color: var(--green);
+            background: rgba(74,222,128,0.06);
+            color: var(--green);
+            opacity: 0.7;
+        }
+
+        .opt-letter {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+
+        .quiz-opt-btn.correct .opt-letter { background: var(--green); color: #000; }
+        .quiz-opt-btn.wrong   .opt-letter { background: var(--danger); color: #fff; }
+        .quiz-opt-btn.reveal  .opt-letter { background: rgba(74,222,128,0.3); }
+
+        /* Explanation */
+        .quiz-explain {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: var(--bg);
+            border-left: 3px solid var(--accent2);
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .quiz-explain strong { color: var(--accent2); }
+
+        /* Next button */
+        .quiz-next-btn {
+            margin-top: 18px;
+            padding: 12px 28px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 9px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            align-self: flex-end;
+        }
+
+        .quiz-next-btn:hover { background: #5a7df0; transform: translateY(-1px); }
+
+        /* ===== RESULT SCREEN ===== */
+        .result-screen {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px 28px;
+        }
+
+        .result-hero {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .result-score-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .result-score-ring svg { transform: rotate(-90deg); }
+
+        .result-score-ring .ring-bg  { fill: none; stroke: var(--border); stroke-width: 8; }
+        .result-score-ring .ring-val {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s cubic-bezier(.4,0,.2,1);
+        }
+
+        .result-score-num {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .result-score-num .big { font-size: 28px; font-weight: 700; }
+        .result-score-num .sub { font-size: 11px; color: var(--text-muted); }
+
+        .result-grade {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .result-subtitle { font-size: 14px; color: var(--text-muted); }
+
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .stat-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-box .val {
+            font-family: 'Space Mono', monospace;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-box .lbl { font-size: 12px; color: var(--text-muted); }
+        .stat-box .val.green  { color: var(--green); }
+        .stat-box .val.red    { color: var(--danger); }
+        .stat-box .val.accent { color: var(--accent); }
+
+        /* Review list */
+        .review-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 12px;
+        }
+
+        .review-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 10px;
+        }
+
+        .review-item.correct-item { border-left: 3px solid var(--green); }
+        .review-item.wrong-item   { border-left: 3px solid var(--danger); }
+
+        .review-item-q {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .review-icon { flex-shrink: 0; font-size: 15px; }
+
+        .review-answers { display: flex; gap: 16px; font-size: 13px; flex-wrap: wrap; }
+        .review-your { color: var(--danger); }
+        .review-correct-ans { color: var(--green); }
+
+        .result-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        /* History tab */
+        .history-tab-panel { display: none; }
+        .history-tab-panel.active { display: block; }
+
+        .quiz-hist-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .quiz-hist-item:hover { border-color: var(--accent); }
+
+        .hist-score-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .hist-score-badge.s-great { background: rgba(74,222,128,0.15); color: var(--green); }
+        .hist-score-badge.s-ok    { background: rgba(250,204,21,0.15); color: #facc15; }
+        .hist-score-badge.s-bad   { background: rgba(248,113,113,0.15); color: var(--danger); }
+
+        .hist-info { flex: 1; min-width: 0; }
+        .hist-topic { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .hist-meta  { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .hist-del-btn { opacity: 0; transition: opacity 0.15s; }
+        .quiz-hist-item:hover .hist-del-btn { opacity: 1; }
 
         /* Modal */
         .modal-overlay {
@@ -774,28 +1116,70 @@
         </div>
 
         <!-- QUIZ -->
-        <div class="panel" id="panel-quiz">
-            <div class="panel-inner">
-                <h2>✅ Tạo Quiz</h2>
-                <div class="form-group">
-                    <label>Chủ đề</label>
-                    <input class="form-control" id="quizTopic" placeholder="Ví dụ: Phương trình bậc hai">
+        <div class="panel" id="panel-quiz" style="overflow:hidden;">
+
+            <!-- VIEW 1: Setup -->
+            <div id="quiz-view-setup" class="panel-inner" style="overflow-y:auto;">
+                <div class="quiz-setup">
+                    <h2>✅ Kiểm tra kiến thức</h2>
+                    <p>Tạo bộ câu hỏi trắc nghiệm theo chủ đề và trả lời từng câu ngay trên trang.</p>
+                    <div class="form-group">
+                        <label>Chủ đề</label>
+                        <input class="form-control" id="quizTopic" placeholder="Ví dụ: Phương trình bậc hai">
+                    </div>
+                    <div style="display:flex;gap:14px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Số câu hỏi</label>
+                            <input class="form-control" id="quizNum" type="number" value="5" min="1" max="10">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Độ khó</label>
+                            <select class="form-control" id="quizDiff">
+                                <option value="easy">🟢 Dễ</option>
+                                <option value="medium" selected>🟡 Trung bình</option>
+                                <option value="hard">🔴 Khó</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                        <button class="btn btn-primary" id="quizStartBtn" onclick="startQuiz()">✅ Bắt đầu Quiz</button>
+                        <button class="btn-ghost" onclick="showQuizHistory()" style="padding:10px 18px;">📋 Lịch sử làm bài</button>
+                    </div>
+                    <div class="loading-spinner" id="quizSpinner" style="margin-top:18px;"><div class="spinner"></div> Đang tạo câu hỏi...</div>
                 </div>
-                <div class="form-group">
-                    <label>Số câu hỏi</label>
-                    <input class="form-control" id="quizNum" type="number" value="5" min="1" max="10">
+            </div>
+
+            <!-- VIEW 2: Playing -->
+            <div id="quiz-view-play" style="display:none;flex-direction:column;height:100%;">
+                <div class="quiz-progress-wrap">
+                    <div class="quiz-progress-bar">
+                        <div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div>
+                    </div>
+                    <div class="quiz-progress-label" id="quizProgressLabel">0 / 0</div>
+                    <button class="icon-btn danger" onclick="abortQuiz()" title="Thoát quiz">✕</button>
                 </div>
-                <div class="form-group">
-                    <label>Độ khó</label>
-                    <select class="form-control" id="quizDiff">
-                        <option value="easy">Dễ</option>
-                        <option value="medium" selected>Trung bình</option>
-                        <option value="hard">Khó</option>
-                    </select>
+                <div class="quiz-card-wrap" id="quizCardWrap"></div>
+            </div>
+
+            <!-- VIEW 3: Result -->
+            <div id="quiz-view-result" style="display:none;flex-direction:column;height:100%;">
+                <div class="result-screen" id="resultScreen"></div>
+            </div>
+
+            <!-- VIEW 4: History -->
+            <div id="quiz-view-history" style="display:none;flex-direction:column;height:100%;">
+                <div class="panel-inner" style="overflow-y:auto;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                        <h2 style="font-size:18px;">📋 Lịch sử làm bài</h2>
+                        <button class="btn-ghost" onclick="showQuizSetup()" style="padding:8px 16px;font-size:13px;">← Quay lại</button>
+                    </div>
+                    <div id="quizHistoryList"></div>
                 </div>
-                <button class="btn btn-primary" id="quizBtn" onclick="createQuiz()">✅ Tạo Quiz</button>
-                <div class="loading-spinner" id="quizSpinner"><div class="spinner"></div> Đang tạo quiz...</div>
-                <div id="quizResult" style="margin-top: 20px;"></div>
+            </div>
+
+            <!-- VIEW 5: History Detail -->
+            <div id="quiz-view-history-detail" style="display:none;flex-direction:column;height:100%;">
+                <div class="panel-inner" style="overflow-y:auto;" id="quizHistoryDetail"></div>
             </div>
         </div>
     </div>
@@ -1191,40 +1575,392 @@
         }
     }
 
-    // ===== QUIZ =====
-    async function createQuiz() {
+    // ===== QUIZ ENGINE =====
+    let quizState = {
+        quizId: null,
+        topic: '',
+        difficulty: '',
+        questions: [],
+        currentIdx: 0,
+        answers: [],      // QuizAnswerRecord[]
+        answered: false   // đã chọn đáp án câu hiện tại chưa
+    };
+
+    const LETTERS = ['A', 'B', 'C', 'D'];
+
+    function quizShowView(viewId) {
+        ['quiz-view-setup','quiz-view-play','quiz-view-result','quiz-view-history','quiz-view-history-detail']
+            .forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (id === viewId) {
+                    el.style.display = 'flex';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+        // setup view uses block, not flex
+        if (viewId === 'quiz-view-setup') {
+            document.getElementById('quiz-view-setup').style.display = 'block';
+        }
+    }
+
+    function showQuizSetup() { quizShowView('quiz-view-setup'); }
+
+    async function startQuiz() {
         const topic = document.getElementById('quizTopic').value.trim();
         if (!topic) { showToast('Vui lòng nhập chủ đề', 'error'); return; }
 
-        const btn = document.getElementById('quizBtn');
+        const btn = document.getElementById('quizStartBtn');
         const spinner = document.getElementById('quizSpinner');
-        const result = document.getElementById('quizResult');
-        btn.disabled = true; spinner.classList.add('active'); result.innerHTML = '';
+        btn.disabled = true;
+        spinner.classList.add('active');
 
         try {
             const res = await fetch(`${API}/api/quiz`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ topic, num_questions: parseInt(document.getElementById('quizNum').value), difficulty: document.getElementById('quizDiff').value, document_ids: uploadedDocs.map(d => d.id) })
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    topic,
+                    num_questions: parseInt(document.getElementById('quizNum').value),
+                    difficulty: document.getElementById('quizDiff').value,
+                    document_ids: uploadedDocs.map(d => d.id)
+                })
             });
             const data = await res.json();
 
-            let html = `<h3 style="font-size:15px;margin-bottom:14px;color:var(--text-muted)">Quiz: ${escHtml(data.topic)}</h3>`;
-            data.questions.forEach((q, i) => {
-                html += `
-                <div class="quiz-question">
-                    <div class="quiz-q">Câu ${i+1}: ${escHtml(q.question)}</div>
-                    ${q.options.map((opt, idx) => `
-                        <div class="quiz-option ${idx === q.correct_answer ? 'quiz-answer' : ''}">${escHtml(opt)}${idx === q.correct_answer ? ' ✓' : ''}</div>
-                    `).join('')}
-                    <div class="quiz-explanation">💡 ${escHtml(q.explanation)}</div>
-                </div>`;
-            });
-            result.innerHTML = html;
+            // Init state
+            quizState = {
+                quizId: data.quiz_id,
+                topic: data.topic,
+                difficulty: data.difficulty,
+                questions: data.questions,
+                currentIdx: 0,
+                answers: [],
+                answered: false
+            };
+
+            quizShowView('quiz-view-play');
+            renderCurrentQuestion();
 
         } catch (e) {
-            result.innerHTML = `<div style="color:var(--danger)">❌ Lỗi: ${e.message}</div>`;
+            showToast('❌ Lỗi tạo quiz: ' + e.message, 'error');
         } finally {
-            btn.disabled = false; spinner.classList.remove('active');
+            btn.disabled = false;
+            spinner.classList.remove('active');
+        }
+    }
+
+    function renderCurrentQuestion() {
+        const { questions, currentIdx } = quizState;
+        const total = questions.length;
+        const q = questions[currentIdx];
+
+        // Progress
+        const pct = (currentIdx / total) * 100;
+        document.getElementById('quizProgressFill').style.width = pct + '%';
+        document.getElementById('quizProgressLabel').textContent = `${currentIdx + 1} / ${total}`;
+
+        quizState.answered = false;
+
+        const wrap = document.getElementById('quizCardWrap');
+        wrap.innerHTML = '';
+
+        const card = document.createElement('div');
+        card.className = 'quiz-card';
+        card.innerHTML = `
+            <div class="quiz-card-meta">
+                <span class="quiz-badge ${q.difficulty}">${q.difficulty === 'easy' ? '🟢 Dễ' : q.difficulty === 'hard' ? '🔴 Khó' : '🟡 Trung bình'}</span>
+                <span style="font-size:12px;color:var(--text-muted);font-family:'Space Mono',monospace;">Câu ${currentIdx + 1}</span>
+            </div>
+            <div class="quiz-question-text">${escHtml(q.question)}</div>
+            <div class="quiz-options" id="optionsWrap">
+                ${q.options.map((opt, idx) => `
+                    <button class="quiz-opt-btn" onclick="selectAnswer(${idx})" data-idx="${idx}">
+                        <span class="opt-letter">${LETTERS[idx]}</span>
+                        <span>${escHtml(opt)}</span>
+                    </button>
+                `).join('')}
+            </div>
+            <div id="explainBox"></div>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+                <button class="quiz-next-btn" id="nextBtn" onclick="nextQuestion()" style="display:none;">
+                    ${currentIdx + 1 < total ? 'Câu tiếp theo →' : 'Xem kết quả 🎉'}
+                </button>
+            </div>
+        `;
+        wrap.appendChild(card);
+        wrap.scrollTop = 0;
+    }
+
+    function selectAnswer(chosenIdx) {
+        if (quizState.answered) return;
+        quizState.answered = true;
+
+        const q = quizState.questions[quizState.currentIdx];
+        const correct = q.correct_answer;
+        const isCorrect = chosenIdx === correct;
+
+        // Record answer
+        quizState.answers.push({
+            question_index: quizState.currentIdx,
+            question: q.question,
+            options: q.options,
+            correct_answer: correct,
+            user_answer: chosenIdx,
+            is_correct: isCorrect,
+            explanation: q.explanation
+        });
+
+        // Style buttons
+        document.querySelectorAll('.quiz-opt-btn').forEach((btn, idx) => {
+            btn.disabled = true;
+            if (idx === chosenIdx && isCorrect)  btn.classList.add('correct');
+            if (idx === chosenIdx && !isCorrect) btn.classList.add('wrong');
+            if (idx === correct && !isCorrect)   btn.classList.add('reveal');
+        });
+
+        // Show explanation
+        const explainBox = document.getElementById('explainBox');
+        explainBox.innerHTML = `
+            <div class="quiz-explain">
+                ${isCorrect ? '<strong>✅ Chính xác!</strong>' : '<strong>❌ Chưa đúng.</strong>'}
+                ${escHtml(q.explanation)}
+            </div>`;
+
+        // Show next button
+        document.getElementById('nextBtn').style.display = 'inline-flex';
+    }
+
+    function nextQuestion() {
+        quizState.currentIdx++;
+        if (quizState.currentIdx < quizState.questions.length) {
+            renderCurrentQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    async function finishQuiz() {
+        quizShowView('quiz-view-result');
+
+        // Submit to backend
+        let resultData = null;
+        try {
+            const res = await fetch(`${API}/api/quiz/submit`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    quiz_id: quizState.quizId,
+                    topic: quizState.topic,
+                    difficulty: quizState.difficulty,
+                    answers: quizState.answers
+                })
+            });
+            resultData = await res.json();
+        } catch (e) {
+            // Calculate locally if backend fails
+            const correct = quizState.answers.filter(a => a.is_correct).length;
+            resultData = {
+                correct_count: correct,
+                total_questions: quizState.answers.length,
+                score: Math.round(correct / quizState.answers.length * 100)
+            };
+        }
+
+        renderResultScreen(resultData);
+    }
+
+    function renderResultScreen(r) {
+        const score = r.score || 0;
+        const correct = r.correct_count || 0;
+        const total = r.total_questions || quizState.answers.length;
+        const wrong = total - correct;
+
+        let grade, gradeColor;
+        if (score >= 90)      { grade = '🏆 Xuất sắc!';   gradeColor = '#4ade80'; }
+        else if (score >= 70) { grade = '👍 Khá tốt!';    gradeColor = '#facc15'; }
+        else if (score >= 50) { grade = '📖 Cần ôn thêm'; gradeColor = '#fb923c'; }
+        else                  { grade = '💪 Cố gắng hơn'; gradeColor = '#f87171'; }
+
+        const ringColor = score >= 70 ? '#4ade80' : score >= 50 ? '#facc15' : '#f87171';
+        const circumference = 2 * Math.PI * 46; // r=46
+        const offset = circumference * (1 - score / 100);
+
+        const screen = document.getElementById('resultScreen');
+        screen.innerHTML = `
+            <div class="result-hero">
+                <div class="result-score-ring">
+                    <svg width="120" height="120" viewBox="0 0 120 120">
+                        <circle class="ring-bg" cx="60" cy="60" r="46"/>
+                        <circle class="ring-val" cx="60" cy="60" r="46"
+                            stroke="${ringColor}"
+                            stroke-dasharray="${circumference}"
+                            stroke-dashoffset="${circumference}"
+                            id="ringAnim"/>
+                    </svg>
+                    <div class="result-score-num">
+                        <div class="big" style="color:${ringColor}">${score}%</div>
+                        <div class="sub">điểm</div>
+                    </div>
+                </div>
+                <div class="result-grade" style="color:${gradeColor}">${grade}</div>
+                <div class="result-subtitle">Chủ đề: <strong>${escHtml(quizState.topic)}</strong></div>
+            </div>
+
+            <div class="result-stats">
+                <div class="stat-box">
+                    <div class="val green">${correct}</div>
+                    <div class="lbl">Câu đúng</div>
+                </div>
+                <div class="stat-box">
+                    <div class="val red">${wrong}</div>
+                    <div class="lbl">Câu sai</div>
+                </div>
+                <div class="stat-box">
+                    <div class="val accent">${total}</div>
+                    <div class="lbl">Tổng câu</div>
+                </div>
+            </div>
+
+            <div class="review-title">Chi tiết từng câu</div>
+            ${quizState.answers.map((a, i) => `
+                <div class="review-item ${a.is_correct ? 'correct-item' : 'wrong-item'}">
+                    <div class="review-item-q">
+                        <span class="review-icon">${a.is_correct ? '✅' : '❌'}</span>
+                        <span>Câu ${i+1}: ${escHtml(a.question)}</span>
+                    </div>
+                    ${!a.is_correct ? `
+                    <div class="review-answers">
+                        <span class="review-your">Bạn chọn: ${escHtml(a.options[a.user_answer])}</span>
+                        <span class="review-correct-ans">Đáp án đúng: ${escHtml(a.options[a.correct_answer])}</span>
+                    </div>` : ''}
+                    <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">💡 ${escHtml(a.explanation)}</div>
+                </div>
+            `).join('')}
+
+            <div class="result-actions">
+                <button class="btn btn-primary" onclick="startQuiz()">🔄 Làm lại</button>
+                <button class="btn-ghost" onclick="showQuizSetup()" style="padding:11px 20px;">📝 Quiz mới</button>
+                <button class="btn-ghost" onclick="showQuizHistory()" style="padding:11px 20px;">📋 Lịch sử</button>
+            </div>
+        `;
+
+        // Animate ring
+        setTimeout(() => {
+            const ring = document.getElementById('ringAnim');
+            if (ring) ring.style.strokeDashoffset = offset;
+        }, 100);
+    }
+
+    function abortQuiz() {
+        if (quizState.questions.length > 0 && quizState.currentIdx > 0) {
+            if (!confirm('Bạn có chắc muốn thoát? Kết quả sẽ không được lưu.')) return;
+        }
+        showQuizSetup();
+    }
+
+    // ===== QUIZ HISTORY =====
+    async function showQuizHistory() {
+        quizShowView('quiz-view-history');
+        const list = document.getElementById('quizHistoryList');
+        list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;">Đang tải...</div>';
+
+        try {
+            const res = await fetch(`${API}/api/quiz/history`);
+            const data = await res.json();
+            const history = data.history || [];
+
+            if (history.length === 0) {
+                list.innerHTML = '<div style="color:var(--text-muted);font-size:14px;padding:20px 0;text-align:center;">Chưa có lịch sử làm quiz</div>';
+                return;
+            }
+
+            list.innerHTML = history.map(r => {
+                const scoreCls = r.score >= 70 ? 's-great' : r.score >= 50 ? 's-ok' : 's-bad';
+                const diffLabel = r.difficulty === 'easy' ? '🟢 Dễ' : r.difficulty === 'hard' ? '🔴 Khó' : '🟡 TB';
+                const date = r.completed_at ? new Date(r.completed_at).toLocaleDateString('vi-VN') : '';
+                return `
+                <div class="quiz-hist-item" onclick="showHistoryDetail('${r.id}')">
+                    <div class="hist-score-badge ${scoreCls}">${r.score}%</div>
+                    <div class="hist-info">
+                        <div class="hist-topic">${escHtml(r.topic)}</div>
+                        <div class="hist-meta">${diffLabel} · ${r.correct_count}/${r.total_questions} câu đúng · ${date}</div>
+                    </div>
+                    <button class="icon-btn danger hist-del-btn" onclick="deleteHistItem(event,'${r.id}')" title="Xóa">🗑️</button>
+                </div>`;
+            }).join('');
+
+        } catch (e) {
+            list.innerHTML = '<div style="color:var(--danger);font-size:13px;">Không thể tải lịch sử</div>';
+        }
+    }
+
+    async function showHistoryDetail(resultId) {
+        quizShowView('quiz-view-history-detail');
+        const container = document.getElementById('quizHistoryDetail');
+        container.innerHTML = '<div style="color:var(--text-muted);">Đang tải...</div>';
+
+        try {
+            const res = await fetch(`${API}/api/quiz/history/${resultId}`);
+            const r = await res.json();
+            const score = r.score || 0;
+            const ringColor = score >= 70 ? '#4ade80' : score >= 50 ? '#facc15' : '#f87171';
+            const circumference = 2 * Math.PI * 46;
+            const offset = circumference * (1 - score / 100);
+
+            container.innerHTML = `
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                    <h2 style="font-size:17px;">📋 Chi tiết bài làm</h2>
+                    <button class="btn-ghost" onclick="showQuizHistory()" style="padding:8px 16px;font-size:13px;">← Quay lại</button>
+                </div>
+                <div class="result-hero" style="margin-bottom:20px;">
+                    <div class="result-score-ring">
+                        <svg width="120" height="120" viewBox="0 0 120 120">
+                            <circle class="ring-bg" cx="60" cy="60" r="46"/>
+                            <circle class="ring-val" cx="60" cy="60" r="46"
+                                stroke="${ringColor}"
+                                stroke-dasharray="${circumference}"
+                                stroke-dashoffset="${offset}"
+                                id="ringAnimDetail"/>
+                        </svg>
+                        <div class="result-score-num">
+                            <div class="big" style="color:${ringColor}">${score}%</div>
+                        </div>
+                    </div>
+                    <div style="font-size:16px;font-weight:600;">${escHtml(r.topic)}</div>
+                    <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">${r.correct_count}/${r.total_questions} câu đúng · ${new Date(r.completed_at).toLocaleString('vi-VN')}</div>
+                </div>
+                <div class="review-title">Chi tiết từng câu</div>
+                ${(r.answers || []).map((a, i) => `
+                    <div class="review-item ${a.is_correct ? 'correct-item' : 'wrong-item'}">
+                        <div class="review-item-q">
+                            <span class="review-icon">${a.is_correct ? '✅' : '❌'}</span>
+                            <span>Câu ${i+1}: ${escHtml(a.question)}</span>
+                        </div>
+                        ${!a.is_correct ? `
+                        <div class="review-answers">
+                            <span class="review-your">Bạn chọn: ${escHtml((a.options||[])[a.user_answer]||'')}</span>
+                            <span class="review-correct-ans">Đáp án: ${escHtml((a.options||[])[a.correct_answer]||'')}</span>
+                        </div>` : ''}
+                        <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">💡 ${escHtml(a.explanation)}</div>
+                    </div>
+                `).join('')}
+            `;
+        } catch (e) {
+            container.innerHTML = '<div style="color:var(--danger);">Không thể tải chi tiết</div>';
+        }
+    }
+
+    async function deleteHistItem(e, resultId) {
+        e.stopPropagation();
+        if (!confirm('Xóa bản ghi này?')) return;
+        try {
+            await fetch(`${API}/api/quiz/history/${resultId}`, { method: 'DELETE' });
+            showToast('🗑️ Đã xóa', 'success');
+            showQuizHistory();
+        } catch (err) {
+            showToast('❌ Lỗi xóa', 'error');
         }
     }
 

@@ -1,6 +1,5 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import List, Optional
 import os
@@ -14,7 +13,8 @@ from models import (
     DocumentUploadResponse, Conversation,
     MindMapRequest, MindMapResponse,
     NoteRequest, Note,
-    QuizRequest, QuizResponse
+    QuizRequest, QuizResponse,
+    QuizResultSubmit, QuizResult
 )
 from document_processor import DocumentProcessor
 from vector_store import VectorStore
@@ -23,15 +23,14 @@ from mindmap_service import MindMapService
 from note_service import NoteService
 from quiz_service import QuizService
 from conversation_store import load_conversations, save_conversations, save_single_conversation
+from quiz_store import load_quiz_results, save_quiz_result, delete_quiz_result
 
-# Initialize FastAPI app
 app = FastAPI(
     title="Math Chatbot API",
     description="API cho chatbot hỗ trợ học sinh cấp 3 học toán",
     version="1.0.0"
 )
 
-# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -40,7 +39,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize services
 document_processor = DocumentProcessor()
 vector_store = VectorStore()
 chat_service = ChatService()
@@ -48,7 +46,6 @@ mindmap_service = MindMapService()
 note_service = NoteService()
 quiz_service = QuizService()
 
-# Load conversations từ file JSON khi khởi động
 conversations_storage = load_conversations()
 documents_storage = {}
 
@@ -56,94 +53,60 @@ documents_storage = {}
 
 @app.get("/")
 async def root():
-    return {
-        "message": "Math Chatbot API is running",
-        "version": "1.0.0",
-        "status": "healthy"
-    }
+    return {"message": "Math Chatbot API is running", "version": "1.0.0", "status": "healthy"}
 
 @app.get("/health")
 async def health_check():
     return {
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
-        "services": {
-            "gemini_api": "connected",
-            "vector_store": "active",
-            "document_storage": "active"
-        }
+        "services": {"gemini_api": "connected", "vector_store": "active", "document_storage": "active"}
     }
 
-# ==================== DOCUMENT MANAGEMENT ====================
+# ==================== DOCUMENTS ====================
 
 @app.post("/api/documents/upload", response_model=DocumentUploadResponse)
 async def upload_document(file: UploadFile = File(...)):
     try:
         content = await file.read()
-        file_size = len(content)
-
-        if file_size > settings.MAX_UPLOAD_SIZE:
-            raise HTTPException(
-                status_code=400,
-                detail=f"File quá lớn. Kích thước tối đa: {settings.MAX_UPLOAD_SIZE / 1024 / 1024}MB"
-            )
-
+        if len(content) > settings.MAX_UPLOAD_SIZE:
+            raise HTTPException(status_code=400, detail="File quá lớn.")
         await file.seek(0)
         file_path = os.path.join(settings.UPLOAD_DIR, file.filename)
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-
         doc_data = await document_processor.process_document(file_path, file.filename)
         documents_storage[doc_data["id"]] = doc_data
-
         chunks = document_processor.chunk_text(doc_data["content"])
         vector_store.add_document(
             doc_id=doc_data["id"],
             content=doc_data["content"],
-            metadata={
-                "filename": doc_data["filename"],
-                "file_type": doc_data["file_type"]
-            },
+            metadata={"filename": doc_data["filename"], "file_type": doc_data["file_type"]},
             chunks=chunks
         )
-
         return DocumentUploadResponse(
-            document_id=doc_data["id"],
-            filename=doc_data["filename"],
-            status="success",
-            message="Tải tài liệu thành công"
+            document_id=doc_data["id"], filename=doc_data["filename"],
+            status="success", message="Tải tài liệu thành công"
         )
-
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Lỗi xử lý tài liệu: {str(e)}")
 
 @app.get("/api/documents")
 async def get_documents():
-    try:
-        docs = [
-            {
-                "id": doc["id"],
-                "filename": doc["filename"],
-                "file_type": doc["file_type"],
-                "upload_date": doc.get("upload_date", datetime.now()).isoformat()
-                if not isinstance(doc.get("upload_date"), str) else doc.get("upload_date")
-            }
-            for doc in documents_storage.values()
-        ]
-        return {"documents": docs}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    docs = [
+        {"id": d["id"], "filename": d["filename"], "file_type": d["file_type"],
+         "upload_date": datetime.now().isoformat()}
+        for d in documents_storage.values()
+    ]
+    return {"documents": docs}
 
 @app.get("/api/documents/{document_id}")
 async def get_document(document_id: str):
     if document_id not in documents_storage:
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
-
     doc = documents_storage[document_id]
     return {
-        "id": doc["id"],
-        "filename": doc["filename"],
-        "file_type": doc["file_type"],
+        "id": doc["id"], "filename": doc["filename"], "file_type": doc["file_type"],
         "content": doc["content"][:500] + "..." if len(doc["content"]) > 500 else doc["content"],
         "metadata": doc.get("metadata", {})
     }
@@ -152,7 +115,6 @@ async def get_document(document_id: str):
 async def delete_document(document_id: str):
     if document_id not in documents_storage:
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
-
     vector_store.delete_document(document_id)
     del documents_storage[document_id]
     return {"message": "Xóa tài liệu thành công"}
@@ -163,63 +125,36 @@ async def delete_document(document_id: str):
 async def chat(request: ChatRequest):
     try:
         conversation_id = request.conversation_id or str(uuid.uuid4())
-
         if conversation_id not in conversations_storage:
             conversations_storage[conversation_id] = Conversation(
-                id=conversation_id,
-                title=request.message[:50],
-                messages=[],
-                document_ids=request.document_ids or []
+                id=conversation_id, title=request.message[:50],
+                messages=[], document_ids=request.document_ids or []
             )
-
         conversation = conversations_storage[conversation_id]
-
-        user_message = Message(
-            role=MessageRole.USER,
-            content=request.message
-        )
-        conversation.messages.append(user_message)
-
+        conversation.messages.append(Message(role=MessageRole.USER, content=request.message))
         response_data = await chat_service.chat(
             message=request.message,
             conversation_history=conversation.messages,
             document_ids=request.document_ids
         )
-
-        assistant_message = Message(
-            role=MessageRole.ASSISTANT,
-            content=response_data["response"]
-        )
-        conversation.messages.append(assistant_message)
+        conversation.messages.append(Message(role=MessageRole.ASSISTANT, content=response_data["response"]))
         conversation.updated_at = datetime.now()
-
-        # Lưu vào JSON sau mỗi tin nhắn
         save_single_conversation(conversations_storage, conversation_id)
-
         return ChatResponse(
             response=response_data["response"],
             conversation_id=conversation_id,
             sources=response_data.get("sources", [])
         )
-
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Lỗi chat: {str(e)}")
 
 @app.get("/api/conversations")
 async def get_conversations():
     convs = sorted(
-        [
-            {
-                "id": conv.id,
-                "title": conv.title,
-                "message_count": len(conv.messages),
-                "created_at": conv.created_at.isoformat(),
-                "updated_at": conv.updated_at.isoformat()
-            }
-            for conv in conversations_storage.values()
-        ],
-        key=lambda x: x["updated_at"],
-        reverse=True  # Mới nhất lên đầu
+        [{"id": c.id, "title": c.title, "message_count": len(c.messages),
+          "created_at": c.created_at.isoformat(), "updated_at": c.updated_at.isoformat()}
+         for c in conversations_storage.values()],
+        key=lambda x: x["updated_at"], reverse=True
     )
     return {"conversations": convs}
 
@@ -227,34 +162,21 @@ async def get_conversations():
 async def get_conversation(conversation_id: str):
     if conversation_id not in conversations_storage:
         raise HTTPException(status_code=404, detail="Không tìm thấy hội thoại")
-
     conv = conversations_storage[conversation_id]
     return {
-        "id": conv.id,
-        "title": conv.title,
-        "messages": [
-            {
-                "role": msg.role.value,
-                "content": msg.content,
-                "timestamp": msg.timestamp.isoformat()
-            }
-            for msg in conv.messages
-        ],
+        "id": conv.id, "title": conv.title,
+        "messages": [{"role": m.role.value, "content": m.content, "timestamp": m.timestamp.isoformat()} for m in conv.messages],
         "document_ids": conv.document_ids,
-        "created_at": conv.created_at.isoformat(),
-        "updated_at": conv.updated_at.isoformat()
+        "created_at": conv.created_at.isoformat(), "updated_at": conv.updated_at.isoformat()
     }
 
 @app.delete("/api/conversations/{conversation_id}")
 async def delete_conversation(conversation_id: str):
     if conversation_id not in conversations_storage:
         raise HTTPException(status_code=404, detail="Không tìm thấy hội thoại")
-
     del conversations_storage[conversation_id]
     save_conversations(conversations_storage)
     return {"message": "Xóa hội thoại thành công"}
-
-# ==================== MỚI: Đổi tên conversation ====================
 
 class RenameRequest(BaseModel):
     title: str
@@ -263,7 +185,6 @@ class RenameRequest(BaseModel):
 async def rename_conversation(conversation_id: str, body: RenameRequest):
     if conversation_id not in conversations_storage:
         raise HTTPException(status_code=404, detail="Không tìm thấy hội thoại")
-
     conversations_storage[conversation_id].title = body.title.strip()
     conversations_storage[conversation_id].updated_at = datetime.now()
     save_conversations(conversations_storage)
@@ -275,9 +196,7 @@ async def rename_conversation(conversation_id: str, body: RenameRequest):
 async def create_mindmap(request: MindMapRequest):
     try:
         root_node = await mindmap_service.generate_mindmap(
-            topic=request.topic,
-            document_ids=request.document_ids,
-            depth=request.depth
+            topic=request.topic, document_ids=request.document_ids, depth=request.depth
         )
         return MindMapResponse(root_node=root_node, topic=request.topic)
     except Exception as e:
@@ -286,36 +205,25 @@ async def create_mindmap(request: MindMapRequest):
 @app.post("/api/concept-map")
 async def create_concept_map(concepts: List[str], document_ids: Optional[List[str]] = None):
     try:
-        concept_map = await mindmap_service.generate_concept_map(
-            concepts=concepts,
-            document_ids=document_ids
-        )
-        return concept_map
+        return await mindmap_service.generate_concept_map(concepts=concepts, document_ids=document_ids)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Lỗi tạo concept map: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ==================== NOTES ====================
 
 @app.post("/api/notes", response_model=Note)
 async def create_note(request: NoteRequest):
     try:
-        note = await note_service.create_note(
-            title=request.title,
-            content=request.content,
-            document_ids=request.document_ids,
-            auto_generate=request.auto_generate
+        return await note_service.create_note(
+            title=request.title, content=request.content,
+            document_ids=request.document_ids, auto_generate=request.auto_generate
         )
-        return note
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Lỗi tạo ghi chú: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/notes")
 async def get_notes():
-    try:
-        notes = note_service.get_all_notes()
-        return {"notes": notes}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return {"notes": note_service.get_all_notes()}
 
 @app.get("/api/notes/{note_id}", response_model=Note)
 async def get_note(note_id: str):
@@ -333,31 +241,23 @@ async def update_note(note_id: str, title: Optional[str] = None, content: Option
 
 @app.delete("/api/notes/{note_id}")
 async def delete_note(note_id: str):
-    success = note_service.delete_note(note_id)
-    if not success:
+    if not note_service.delete_note(note_id):
         raise HTTPException(status_code=404, detail="Không tìm thấy ghi chú")
     return {"message": "Xóa ghi chú thành công"}
 
 @app.post("/api/notes/summarize")
 async def summarize_notes(note_ids: List[str]):
-    try:
-        summary = await note_service.summarize_notes(note_ids)
-        return {"summary": summary}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return {"summary": await note_service.summarize_notes(note_ids)}
 
 @app.get("/api/notes/{note_id}/flashcards")
 async def get_flashcards(note_id: str):
-    try:
-        flashcards = await note_service.generate_flashcards(note_id)
-        return {"flashcards": flashcards}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return {"flashcards": await note_service.generate_flashcards(note_id)}
 
 # ==================== QUIZ ====================
 
 @app.post("/api/quiz", response_model=QuizResponse)
 async def create_quiz(request: QuizRequest):
+    """Tạo bộ câu hỏi, trả về quiz_id để dùng khi nộp bài"""
     try:
         questions = await quiz_service.generate_quiz(
             topic=request.topic,
@@ -365,23 +265,87 @@ async def create_quiz(request: QuizRequest):
             difficulty=request.difficulty,
             document_ids=request.document_ids
         )
-        return QuizResponse(questions=questions, topic=request.topic)
+        return QuizResponse(
+            quiz_id=str(uuid.uuid4()),
+            questions=questions,
+            topic=request.topic,
+            difficulty=request.difficulty
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Lỗi tạo quiz: {str(e)}")
 
+
+@app.post("/api/quiz/submit", response_model=QuizResult)
+async def submit_quiz(payload: QuizResultSubmit):
+    """Nhận kết quả làm bài, tính điểm và lưu JSON"""
+    try:
+        correct_count = sum(1 for a in payload.answers if a.is_correct)
+        total = len(payload.answers)
+        score = round((correct_count / total * 100) if total > 0 else 0, 1)
+
+        result = QuizResult(
+            id=str(uuid.uuid4()),
+            quiz_id=payload.quiz_id,
+            topic=payload.topic,
+            difficulty=payload.difficulty,
+            total_questions=total,
+            correct_count=correct_count,
+            score=score,
+            answers=payload.answers,
+            completed_at=datetime.now()
+        )
+        save_quiz_result(result.model_dump(mode="json"))
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Lỗi lưu kết quả: {str(e)}")
+
+
+@app.get("/api/quiz/history")
+async def get_quiz_history():
+    """Lấy toàn bộ lịch sử làm quiz (bản tóm tắt)"""
+    results = load_quiz_results()
+    summaries = [
+        {
+            "id": r.get("id"),
+            "topic": r.get("topic"),
+            "difficulty": r.get("difficulty"),
+            "total_questions": r.get("total_questions"),
+            "correct_count": r.get("correct_count"),
+            "score": r.get("score"),
+            "completed_at": r.get("completed_at"),
+        }
+        for r in results
+    ]
+    return {"history": summaries}
+
+
+@app.get("/api/quiz/history/{result_id}")
+async def get_quiz_result_detail(result_id: str):
+    """Xem chi tiết một lần làm bài"""
+    results = load_quiz_results()
+    for r in results:
+        if r.get("id") == result_id:
+            return r
+    raise HTTPException(status_code=404, detail="Không tìm thấy kết quả")
+
+
+@app.delete("/api/quiz/history/{result_id}")
+async def delete_quiz_history_item(result_id: str):
+    """Xóa một bản ghi lịch sử"""
+    if not delete_quiz_result(result_id):
+        raise HTTPException(status_code=404, detail="Không tìm thấy kết quả")
+    return {"message": "Đã xóa"}
+
+
 @app.post("/api/practice-problems")
 async def create_practice_problems(
-    topic: str,
-    num_problems: int = 5,
-    difficulty: str = "medium",
-    document_ids: Optional[List[str]] = None
+    topic: str, num_problems: int = 5,
+    difficulty: str = "medium", document_ids: Optional[List[str]] = None
 ):
     try:
         problems = await quiz_service.generate_practice_problems(
-            topic=topic,
-            num_problems=num_problems,
-            difficulty=difficulty,
-            document_ids=document_ids
+            topic=topic, num_problems=num_problems,
+            difficulty=difficulty, document_ids=document_ids
         )
         return {"problems": problems}
     except Exception as e:
@@ -390,8 +354,7 @@ async def create_practice_problems(
 @app.post("/api/check-answer")
 async def check_answer(question: str, user_answer: str, correct_answer: str):
     try:
-        result = await quiz_service.check_answer(question, user_answer, correct_answer)
-        return result
+        return await quiz_service.check_answer(question, user_answer, correct_answer)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -400,16 +363,14 @@ async def check_answer(question: str, user_answer: str, correct_answer: str):
 @app.post("/api/study-plan")
 async def create_study_plan(topic: str, document_ids: Optional[List[str]] = None):
     try:
-        plan = await chat_service.generate_study_plan(topic, document_ids)
-        return {"study_plan": plan}
+        return {"study_plan": await chat_service.generate_study_plan(topic, document_ids)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/explain-concept")
 async def explain_concept(concept: str, document_ids: Optional[List[str]] = None):
     try:
-        explanation = await chat_service.explain_concept(concept, document_ids)
-        return {"explanation": explanation}
+        return {"explanation": await chat_service.explain_concept(concept, document_ids)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
