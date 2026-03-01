@@ -3,575 +3,1309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Chatbot - Demo</title>
+    <title>Math Chatbot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #22263a;
+            --border: #2e3347;
+            --accent: #6c8fff;
+            --accent2: #a78bfa;
+            --green: #4ade80;
+            --text: #e2e8f0;
+            --text-muted: #64748b;
+            --danger: #f87171;
+            --sidebar-w: 280px;
         }
-        
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #2b345c 0%, #241c2c 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        h1 {
-            color: white;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .tabs {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            overflow: hidden;
         }
-        
-        .tab {
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        .tab:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .tab.active {
-            background: white;
-            color: #667eea;
-            font-weight: bold;
-        }
-        
-        .tab-content {
-            display: none;
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .upload-area {
-            border: 3px dashed #667eea;
-            border-radius: 8px;
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .upload-area:hover {
-            background: #f8f9ff;
-            border-color: #764ba2;
-        }
-        
-        .chat-container {
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--surface);
+            border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            height: 500px;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
         }
-        
-        .messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: #f8f9ff;
-            border-radius: 8px;
-            margin-bottom: 20px;
+
+        .sidebar-header {
+            padding: 20px 16px 16px;
+            border-bottom: 1px solid var(--border);
         }
-        
-        .message {
-            margin-bottom: 15px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            max-width: 80%;
-        }
-        
-        .message.user {
-            background: #667eea;
-            color: white;
-            margin-left: auto;
-        }
-        
-        .message.assistant {
-            background: white;
-            border: 1px solid #ddd;
-        }
-        
-        .input-group {
+
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+            margin-bottom: 14px;
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 8px;
         }
-        
-        input[type="text"],
-        input[type="number"],
-        textarea,
-        select {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        button {
-            padding: 12px 24px;
-            background: #667eea;
-            color: white;
+
+        .logo span { color: var(--accent2); }
+
+        .new-chat-btn {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--accent);
+            color: #fff;
             border: none;
             border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .new-chat-btn:hover { background: #5a7df0; transform: translateY(-1px); }
+        .new-chat-btn:active { transform: translateY(0); }
+
+        .sidebar-tabs {
+            display: flex;
+            padding: 12px 16px 0;
+            gap: 4px;
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 7px 0;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .sidebar-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+
+        .history-section-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            padding: 8px 6px 4px;
+        }
+
+        .history-item {
+            padding: 10px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            transition: background 0.15s;
+            group: true;
+            position: relative;
+        }
+
+        .history-item:hover { background: var(--surface2); }
+        .history-item.active { background: var(--surface2); outline: 1px solid var(--accent); }
+
+        .history-item-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .history-item-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-item-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .history-item-actions {
+            display: flex;
+            gap: 2px;
+            opacity: 0;
+            transition: opacity 0.15s;
+            flex-shrink: 0;
+        }
+
+        .history-item:hover .history-item-actions { opacity: 1; }
+
+        .icon-btn {
+            width: 26px;
+            height: 26px;
+            border: none;
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .icon-btn:hover { background: var(--border); color: var(--text); }
+        .icon-btn.danger:hover { background: rgba(248,113,113,0.15); color: var(--danger); }
+
+        /* ===== MAIN AREA ===== */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            background: var(--bg);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+        .topbar-tabs {
+            display: flex;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .tab-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 7px;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn:hover { background: var(--surface2); color: var(--text); }
+        .tab-btn.active { background: var(--surface2); color: var(--accent); }
+
+        .conv-title-display {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* ===== TAB PANELS ===== */
+        .panels { flex: 1; overflow: hidden; position: relative; }
+
+        .panel {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+        }
+
+        .panel.active { display: flex; }
+
+        /* ===== CHAT PANEL ===== */
+        .messages-wrap {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .big-icon { font-size: 48px; }
+        .empty-state h2 { font-size: 18px; font-weight: 600; color: var(--text); }
+        .empty-state p { font-size: 14px; text-align: center; max-width: 300px; line-height: 1.6; }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .suggestion-chip {
+            padding: 8px 14px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .suggestion-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+        .bubble {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            animation: fadeUp 0.25s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .bubble.user { flex-direction: row-reverse; }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .avatar.ai { background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+        .avatar.user-av { background: var(--surface2); border: 1px solid var(--border); }
+
+        .bubble-content {
+            max-width: 72%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .bubble.ai .bubble-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px 12px 12px 12px;
+        }
+
+        .bubble.user .bubble-content {
+            background: var(--accent);
+            color: #fff;
+            border-radius: 12px 4px 12px 12px;
+        }
+
+        .bubble-time {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .bubble.ai .bubble-time { text-align: left; }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            padding: 14px 16px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: bounce 1.2s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-6px); }
+        }
+
+        .chat-input-area {
+            padding: 16px 24px 20px;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .chat-textarea {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            resize: none;
+            min-height: 46px;
+            max-height: 160px;
+            transition: border-color 0.2s;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        .chat-textarea:focus { border-color: var(--accent); }
+        .chat-textarea::placeholder { color: var(--text-muted); }
+
+        .send-btn {
+            width: 46px;
+            height: 46px;
+            background: var(--accent);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .send-btn:hover { background: #5a7df0; transform: translateY(-1px); }
+        .send-btn:disabled { background: var(--border); cursor: not-allowed; transform: none; }
+
+        /* ===== OTHER PANELS ===== */
+        .panel-inner {
+            flex: 1;
+            overflow-y: auto;
+            padding: 28px;
+        }
+
+        .panel-inner h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .form-group { margin-bottom: 18px; }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 14px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus { border-color: var(--accent); }
+        .form-control::placeholder { color: var(--text-muted); }
+
+        .btn {
+            padding: 11px 22px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: #5a7df0; transform: translateY(-1px); }
+        .btn-primary:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; transform: none; }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 18px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .loading-spinner {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 14px;
+        }
+
+        .loading-spinner.active { display: flex; }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Upload area */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-muted);
+        }
+
+        .upload-zone:hover { border-color: var(--accent); color: var(--accent); background: rgba(108,143,255,0.04); }
+
+        .upload-zone .upload-icon { font-size: 36px; margin-bottom: 10px; }
+        .upload-zone p { font-size: 14px; }
+        .upload-zone small { font-size: 12px; opacity: 0.7; }
+
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .doc-card {
+            padding: 14px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        .doc-card-name { font-weight: 500; color: var(--text); margin-bottom: 4px; word-break: break-all; }
+        .doc-card-type { color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Quiz result */
+        .quiz-question {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+
+        .quiz-q { font-weight: 500; margin-bottom: 12px; font-size: 14px; }
+        .quiz-option { padding: 8px 12px; border-radius: 6px; font-size: 13px; margin-bottom: 6px; }
+        .quiz-answer { background: rgba(74,222,128,0.12); color: var(--green); border: 1px solid rgba(74,222,128,0.3); }
+        .quiz-explanation { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-muted); }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            width: 360px;
+        }
+
+        .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+
+        .btn-ghost {
+            padding: 9px 18px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            color: var(--text-muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
+
+        .btn-danger {
+            padding: 9px 18px;
+            background: rgba(248,113,113,0.15);
+            border: 1px solid var(--danger);
+            border-radius: 7px;
+            color: var(--danger);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-danger:hover { background: rgba(248,113,113,0.25); }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px 18px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            font-size: 13px;
+            color: var(--text);
+            z-index: 200;
+            transform: translateY(60px);
+            opacity: 0;
             transition: all 0.3s;
         }
-        
-        button:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
-        }
-        
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
-        }
-        
-        .result {
-            margin-top: 20px;
-            padding: 20px;
-            background: #f8f9ff;
-            border-radius: 8px;
-            white-space: pre-wrap;
-        }
-        
-        .document-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .document-card {
-            padding: 15px;
-            background: #f8f9ff;
-            border-radius: 8px;
-            border: 2px solid #ddd;
-        }
-        
-        .document-card:hover {
-            border-color: #667eea;
-        }
-        
-        .loading {
-            display: none;
-            text-align: center;
-            color: #667eea;
-            margin: 20px 0;
-        }
-        
-        .loading.active {
-            display: block;
-        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { border-color: var(--green); }
+        .toast.error { border-color: var(--danger); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🧮 Math Chatbot Demo</h1>
-        
-        <div class="tabs">
-            <button class="tab active" onclick="showTab('chat')">💬 Chat</button>
-            <button class="tab" onclick="showTab('upload')">📄 Upload Tài liệu</button>
-            <button class="tab" onclick="showTab('mindmap')">🧠 Mind Map</button>
-            <button class="tab" onclick="showTab('notes')">📝 Ghi chú</button>
-            <button class="tab" onclick="showTab('quiz')">✅ Quiz</button>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">🧮 Math<span>Bot</span></div>
+        <button class="new-chat-btn" onclick="newChat()">
+            ✏️ Chat mới
+        </button>
+    </div>
+
+    <div class="sidebar-tabs">
+        <button class="sidebar-tab active" onclick="switchSidebarTab('history', this)">Lịch sử</button>
+        <button class="sidebar-tab" onclick="switchSidebarTab('docs', this)">Tài liệu</button>
+    </div>
+
+    <div class="history-list" id="historyList">
+        <div style="color: var(--text-muted); font-size: 13px; padding: 16px 6px; text-align: center;">
+            Đang tải lịch sử...
         </div>
-        
-        <!-- Chat Tab -->
-        <div id="chat" class="tab-content active">
-            <h2>Chat với AI</h2>
-            <div class="chat-container">
-                <div id="messages" class="messages"></div>
-                <div class="input-group">
-                    <input type="text" id="chatInput" placeholder="Hỏi về toán học..." onkeypress="if(event.key==='Enter') sendMessage()">
-                    <button onclick="sendMessage()">Gửi</button>
+    </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+    <div class="topbar">
+        <div class="topbar-tabs">
+            <button class="tab-btn active" onclick="showPanel('chat', this)">💬 Chat</button>
+            <button class="tab-btn" onclick="showPanel('upload', this)">📄 Tài liệu</button>
+            <button class="tab-btn" onclick="showPanel('mindmap', this)">🧠 Mind Map</button>
+            <button class="tab-btn" onclick="showPanel('notes', this)">📝 Ghi chú</button>
+            <button class="tab-btn" onclick="showPanel('quiz', this)">✅ Quiz</button>
+        </div>
+        <div class="conv-title-display" id="convTitleDisplay">—</div>
+    </div>
+
+    <div class="panels">
+        <!-- CHAT -->
+        <div class="panel active" id="panel-chat">
+            <div class="messages-wrap" id="messagesWrap">
+                <div class="empty-state" id="emptyState">
+                    <div class="big-icon">🧮</div>
+                    <h2>Xin chào! Tôi là MathBot</h2>
+                    <p>Hỏi tôi bất kỳ điều gì về toán học cấp 3 — giải thích, bài tập, hay khái niệm.</p>
+                    <div class="suggestions">
+                        <div class="suggestion-chip" onclick="fillInput('Định lý Pythagoras là gì?')">Định lý Pythagoras</div>
+                        <div class="suggestion-chip" onclick="fillInput('Giải phương trình bậc 2: x² - 5x + 6 = 0')">Phương trình bậc 2</div>
+                        <div class="suggestion-chip" onclick="fillInput('Đạo hàm của hàm số y = x³')">Đạo hàm</div>
+                        <div class="suggestion-chip" onclick="fillInput('Giải thích tích phân cho mình')">Tích phân</div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <div class="input-row">
+                    <textarea
+                        class="chat-textarea"
+                        id="chatInput"
+                        placeholder="Hỏi về toán học..."
+                        rows="1"
+                        onkeydown="handleKey(event)"
+                        oninput="autoResize(this)"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
                 </div>
             </div>
         </div>
-        
-        <!-- Upload Tab -->
-        <div id="upload" class="tab-content">
-            <h2>Upload Tài liệu</h2>
-            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                <p>📁 Click để chọn file</p>
-                <p>Hỗ trợ: PDF, DOCX, TXT, JPG, PNG</p>
+
+        <!-- UPLOAD -->
+        <div class="panel" id="panel-upload">
+            <div class="panel-inner">
+                <h2>📄 Tài liệu học tập</h2>
+                <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📁</div>
+                    <p>Click hoặc kéo thả file vào đây</p>
+                    <small>Hỗ trợ: PDF, DOCX, TXT, JPG, PNG — tối đa 10MB</small>
+                </div>
+                <input type="file" id="fileInput" style="display:none" accept=".pdf,.docx,.txt,.jpg,.png" onchange="uploadFile()">
+                <div class="loading-spinner" id="uploadSpinner"><div class="spinner"></div> Đang xử lý tài liệu...</div>
+                <h3 style="margin-top: 24px; font-size: 15px; color: var(--text-muted);">Đã tải lên</h3>
+                <div class="doc-grid" id="docGrid"><p style="color: var(--text-muted); font-size: 13px; margin-top: 10px;">Chưa có tài liệu nào.</p></div>
             </div>
-            <input type="file" id="fileInput" style="display: none" accept=".pdf,.docx,.txt,.jpg,.png" onchange="uploadFile()">
-            
-            <div class="loading" id="uploadLoading">⏳ Đang xử lý...</div>
-            <div id="uploadResult" class="result" style="display: none;"></div>
-            
-            <h3 style="margin-top: 30px;">Tài liệu đã upload:</h3>
-            <div id="documentList" class="document-list"></div>
         </div>
-        
-        <!-- MindMap Tab -->
-        <div id="mindmap" class="tab-content">
-            <h2>Tạo Mind Map</h2>
-            <div class="form-group">
-                <label>Chủ đề:</label>
-                <input type="text" id="mindmapTopic" placeholder="Ví dụ: Hàm số bậc hai">
+
+        <!-- MINDMAP -->
+        <div class="panel" id="panel-mindmap">
+            <div class="panel-inner">
+                <h2>🧠 Tạo Mind Map</h2>
+                <div class="form-group">
+                    <label>Chủ đề</label>
+                    <input class="form-control" id="mmTopic" placeholder="Ví dụ: Hàm số bậc hai">
+                </div>
+                <div class="form-group">
+                    <label>Độ sâu (1–5)</label>
+                    <input class="form-control" id="mmDepth" type="number" value="3" min="1" max="5">
+                </div>
+                <button class="btn btn-primary" id="mmBtn" onclick="createMindMap()">🧠 Tạo Mind Map</button>
+                <div class="loading-spinner" id="mmSpinner"><div class="spinner"></div> Đang tạo mind map...</div>
+                <div class="result-box" id="mmResult" style="display:none"></div>
             </div>
-            <div class="form-group">
-                <label>Độ sâu:</label>
-                <input type="number" id="mindmapDepth" value="3" min="1" max="5">
-            </div>
-            <button onclick="createMindMap()">Tạo Mind Map</button>
-            
-            <div class="loading" id="mindmapLoading">⏳ Đang tạo...</div>
-            <div id="mindmapResult" class="result" style="display: none;"></div>
         </div>
-        
-        <!-- Notes Tab -->
-        <div id="notes" class="tab-content">
-            <h2>Tạo Ghi chú Thông minh</h2>
-            <div class="form-group">
-                <label>Tiêu đề ghi chú:</label>
-                <input type="text" id="noteTitle" placeholder="Ví dụ: Tổng hợp kiến thức Đạo hàm">
+
+        <!-- NOTES -->
+        <div class="panel" id="panel-notes">
+            <div class="panel-inner">
+                <h2>📝 Ghi chú thông minh</h2>
+                <div class="form-group">
+                    <label>Tiêu đề</label>
+                    <input class="form-control" id="noteTitle" placeholder="Ví dụ: Tổng hợp kiến thức Đạo hàm">
+                </div>
+                <div class="form-group">
+                    <label>Nội dung (để trống để AI tự tạo)</label>
+                    <textarea class="form-control" id="noteContent" rows="4" placeholder="Nội dung tùy chọn..."></textarea>
+                </div>
+                <button class="btn btn-primary" id="noteBtn" onclick="createNote()">📝 Tạo Ghi chú</button>
+                <div class="loading-spinner" id="noteSpinner"><div class="spinner"></div> Đang tạo ghi chú...</div>
+                <div class="result-box" id="noteResult" style="display:none"></div>
             </div>
-            <div class="form-group">
-                <label>Nội dung (tùy chọn):</label>
-                <textarea id="noteContent" rows="4" placeholder="Để trống để AI tự động tạo nội dung từ tài liệu"></textarea>
-            </div>
-            <button onclick="createNote()">Tạo Ghi chú</button>
-            
-            <div class="loading" id="noteLoading">⏳ Đang tạo...</div>
-            <div id="noteResult" class="result" style="display: none;"></div>
         </div>
-        
-        <!-- Quiz Tab -->
-        <div id="quiz" class="tab-content">
-            <h2>Tạo Quiz</h2>
-            <div class="form-group">
-                <label>Chủ đề:</label>
-                <input type="text" id="quizTopic" placeholder="Ví dụ: Phương trình bậc hai">
+
+        <!-- QUIZ -->
+        <div class="panel" id="panel-quiz">
+            <div class="panel-inner">
+                <h2>✅ Tạo Quiz</h2>
+                <div class="form-group">
+                    <label>Chủ đề</label>
+                    <input class="form-control" id="quizTopic" placeholder="Ví dụ: Phương trình bậc hai">
+                </div>
+                <div class="form-group">
+                    <label>Số câu hỏi</label>
+                    <input class="form-control" id="quizNum" type="number" value="5" min="1" max="10">
+                </div>
+                <div class="form-group">
+                    <label>Độ khó</label>
+                    <select class="form-control" id="quizDiff">
+                        <option value="easy">Dễ</option>
+                        <option value="medium" selected>Trung bình</option>
+                        <option value="hard">Khó</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="quizBtn" onclick="createQuiz()">✅ Tạo Quiz</button>
+                <div class="loading-spinner" id="quizSpinner"><div class="spinner"></div> Đang tạo quiz...</div>
+                <div id="quizResult" style="margin-top: 20px;"></div>
             </div>
-            <div class="form-group">
-                <label>Số câu hỏi:</label>
-                <input type="number" id="quizNum" value="5" min="1" max="10">
-            </div>
-            <div class="form-group">
-                <label>Độ khó:</label>
-                <select id="quizDifficulty">
-                    <option value="easy">Dễ</option>
-                    <option value="medium" selected>Trung bình</option>
-                    <option value="hard">Khó</option>
-                </select>
-            </div>
-            <button onclick="createQuiz()">Tạo Quiz</button>
-            
-            <div class="loading" id="quizLoading">⏳ Đang tạo...</div>
-            <div id="quizResult" class="result" style="display: none;"></div>
         </div>
     </div>
-    
-    <script>
-        const API_URL = 'http://localhost:8000';
-        let currentConversationId = null;
-        let uploadedDocuments = [];
-        
-        // Tab switching
-        function showTab(tabName) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tabName).classList.add('active');
-            
-            if (tabName === 'upload') {
-                loadDocuments();
-            }
+</main>
+
+<!-- Rename Modal -->
+<div class="modal-overlay" id="renameModal">
+    <div class="modal">
+        <h3>✏️ Đổi tên hội thoại</h3>
+        <input class="form-control" id="renameInput" placeholder="Nhập tên mới...">
+        <div class="modal-actions">
+            <button class="btn-ghost" onclick="closeModal('renameModal')">Hủy</button>
+            <button class="btn btn-primary" onclick="confirmRename()">Lưu</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+        <h3>🗑️ Xóa hội thoại</h3>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">Bạn có chắc muốn xóa hội thoại này? Hành động này không thể hoàn tác.</p>
+        <div class="modal-actions">
+            <button class="btn-ghost" onclick="closeModal('deleteModal')">Hủy</button>
+            <button class="btn-danger" onclick="confirmDelete()">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+    const API = 'http://localhost:8000';
+    let currentConvId = null;
+    let uploadedDocs = [];
+    let pendingDeleteId = null;
+    let pendingRenameId = null;
+
+    // ===== INIT =====
+    loadHistory();
+    loadDocs();
+
+    // ===== TABS =====
+    function showPanel(name, btn) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('panel-' + name).classList.add('active');
+        btn.classList.add('active');
+        if (name === 'upload') loadDocs();
+    }
+
+    function switchSidebarTab(tab, btn) {
+        document.querySelectorAll('.sidebar-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const list = document.getElementById('historyList');
+        if (tab === 'history') {
+            loadHistory();
+        } else {
+            renderDocsSidebar();
         }
-        
-        // Chat
-        async function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            // Add user message
-            addMessage(message, 'user');
-            input.value = '';
-            
-            try {
-                const response = await fetch(`${API_URL}/api/chat`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        message: message,
-                        conversation_id: currentConversationId,
-                        document_ids: uploadedDocuments.map(d => d.id)
-                    })
-                });
-                
-                const result = await response.json();
-                currentConversationId = result.conversation_id;
-                addMessage(result.response, 'assistant');
-            } catch (error) {
-                addMessage('Lỗi: ' + error.message, 'assistant');
-            }
+    }
+
+    // ===== HISTORY =====
+    async function loadHistory() {
+        try {
+            const res = await fetch(`${API}/api/conversations`);
+            const data = await res.json();
+            renderHistory(data.conversations || []);
+        } catch (e) {
+            document.getElementById('historyList').innerHTML =
+                '<div style="color:var(--text-muted);font-size:13px;padding:16px 6px;text-align:center">Không thể tải lịch sử</div>';
         }
-        
-        function addMessage(text, role) {
-            const messagesDiv = document.getElementById('messages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role}`;
-            messageDiv.textContent = text;
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function renderHistory(conversations) {
+        const list = document.getElementById('historyList');
+        if (conversations.length === 0) {
+            list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 6px;text-align:center">Chưa có lịch sử chat</div>';
+            return;
         }
-        
-        // Upload
-        async function uploadFile() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-            
-            if (!file) return;
-            
-            const loading = document.getElementById('uploadLoading');
-            const result = document.getElementById('uploadResult');
-            
-            loading.classList.add('active');
-            result.style.display = 'none';
-            
-            try {
-                const formData = new FormData();
-                formData.append('file', file);
-                
-                const response = await fetch(`${API_URL}/api/documents/upload`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                result.textContent = `✅ ${data.message}\nDocument ID: ${data.document_id}`;
-                result.style.display = 'block';
-                
-                loadDocuments();
-            } catch (error) {
-                result.textContent = '❌ Lỗi: ' + error.message;
-                result.style.display = 'block';
-            } finally {
-                loading.classList.remove('active');
-            }
+
+        // Group by time
+        const now = new Date();
+        const groups = { 'Hôm nay': [], 'Hôm qua': [], 'Tuần này': [], 'Cũ hơn': [] };
+
+        conversations.forEach(c => {
+            const d = new Date(c.updated_at);
+            const diffDays = Math.floor((now - d) / 86400000);
+            if (diffDays === 0) groups['Hôm nay'].push(c);
+            else if (diffDays === 1) groups['Hôm qua'].push(c);
+            else if (diffDays < 7) groups['Tuần này'].push(c);
+            else groups['Cũ hơn'].push(c);
+        });
+
+        list.innerHTML = '';
+        Object.entries(groups).forEach(([label, items]) => {
+            if (items.length === 0) return;
+            list.innerHTML += `<div class="history-section-label">${label}</div>`;
+            items.forEach(c => {
+                const isActive = c.id === currentConvId;
+                const msgCount = c.message_count || 0;
+                list.innerHTML += `
+                <div class="history-item ${isActive ? 'active' : ''}" onclick="loadConversation('${c.id}')" id="item-${c.id}">
+                    <div class="history-item-text">
+                        <div class="history-item-title">${escHtml(c.title)}</div>
+                        <div class="history-item-meta">${msgCount} tin nhắn</div>
+                    </div>
+                    <div class="history-item-actions">
+                        <button class="icon-btn" onclick="openRename(event,'${c.id}','${escHtml(c.title)}')" title="Đổi tên">✏️</button>
+                        <button class="icon-btn danger" onclick="openDelete(event,'${c.id}')" title="Xóa">🗑️</button>
+                    </div>
+                </div>`;
+            });
+        });
+    }
+
+    async function loadConversation(convId) {
+        currentConvId = convId;
+        document.getElementById('convTitleDisplay').textContent = '...';
+
+        // Activate in sidebar
+        document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
+        const item = document.getElementById('item-' + convId);
+        if (item) item.classList.add('active');
+
+        try {
+            const res = await fetch(`${API}/api/conversations/${convId}`);
+            const data = await res.json();
+
+            document.getElementById('convTitleDisplay').textContent = data.title;
+
+            // Clear and render messages
+            const wrap = document.getElementById('messagesWrap');
+            document.getElementById('emptyState')?.remove();
+            wrap.innerHTML = '';
+
+            data.messages.forEach(msg => {
+                appendBubble(msg.content, msg.role === 'user' ? 'user' : 'ai', msg.timestamp);
+            });
+
+            wrap.scrollTop = wrap.scrollHeight;
+
+            // Switch to chat panel
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelector('.tab-btn').classList.add('active');
+            document.getElementById('panel-chat').classList.add('active');
+
+        } catch (e) {
+            showToast('Không thể tải hội thoại', 'error');
         }
-        
-        async function loadDocuments() {
-            try {
-                const response = await fetch(`${API_URL}/api/documents`);
-                const data = await response.json();
-                
-                uploadedDocuments = data.documents;
-                
-                const listDiv = document.getElementById('documentList');
-                listDiv.innerHTML = '';
-                
-                if (data.documents.length === 0) {
-                    listDiv.innerHTML = '<p>Chưa có tài liệu nào</p>';
-                    return;
-                }
-                
-                data.documents.forEach(doc => {
-                    const card = document.createElement('div');
-                    card.className = 'document-card';
-                    card.innerHTML = `
-                        <strong>${doc.filename}</strong><br>
-                        <small>Type: ${doc.file_type}</small><br>
-                        <small>ID: ${doc.id.substring(0, 8)}...</small>
-                    `;
-                    listDiv.appendChild(card);
-                });
-            } catch (error) {
-                console.error('Lỗi tải documents:', error);
-            }
+    }
+
+    function renderDocsSidebar() {
+        const list = document.getElementById('historyList');
+        if (uploadedDocs.length === 0) {
+            list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 6px;text-align:center">Chưa có tài liệu</div>';
+            return;
         }
-        
-        // MindMap
-        async function createMindMap() {
-            const topic = document.getElementById('mindmapTopic').value.trim();
-            const depth = parseInt(document.getElementById('mindmapDepth').value);
-            
-            if (!topic) {
-                alert('Vui lòng nhập chủ đề');
-                return;
-            }
-            
-            const loading = document.getElementById('mindmapLoading');
-            const result = document.getElementById('mindmapResult');
-            
-            loading.classList.add('active');
-            result.style.display = 'none';
-            
-            try {
-                const response = await fetch(`${API_URL}/api/mindmap`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        topic: topic,
-                        depth: depth,
-                        document_ids: uploadedDocuments.map(d => d.id)
-                    })
-                });
-                
-                const data = await response.json();
-                
-                result.textContent = JSON.stringify(data, null, 2);
-                result.style.display = 'block';
-            } catch (error) {
-                result.textContent = '❌ Lỗi: ' + error.message;
-                result.style.display = 'block';
-            } finally {
-                loading.classList.remove('active');
-            }
+        list.innerHTML = uploadedDocs.map(d => `
+            <div class="history-item">
+                <div class="history-item-text">
+                    <div class="history-item-title">${escHtml(d.filename)}</div>
+                    <div class="history-item-meta">${d.file_type.toUpperCase()}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ===== CHAT =====
+    function newChat() {
+        currentConvId = null;
+        document.getElementById('convTitleDisplay').textContent = '—';
+
+        const wrap = document.getElementById('messagesWrap');
+        wrap.innerHTML = `
+            <div class="empty-state" id="emptyState">
+                <div class="big-icon">🧮</div>
+                <h2>Xin chào! Tôi là MathBot</h2>
+                <p>Hỏi tôi bất kỳ điều gì về toán học cấp 3 — giải thích, bài tập, hay khái niệm.</p>
+                <div class="suggestions">
+                    <div class="suggestion-chip" onclick="fillInput('Định lý Pythagoras là gì?')">Định lý Pythagoras</div>
+                    <div class="suggestion-chip" onclick="fillInput('Giải phương trình bậc 2: x² - 5x + 6 = 0')">Phương trình bậc 2</div>
+                    <div class="suggestion-chip" onclick="fillInput('Đạo hàm của hàm số y = x³')">Đạo hàm</div>
+                    <div class="suggestion-chip" onclick="fillInput('Giải thích tích phân cho mình')">Tích phân</div>
+                </div>
+            </div>`;
+
+        // Switch to chat panel
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelector('.tab-btn').classList.add('active');
+        document.getElementById('panel-chat').classList.add('active');
+
+        document.getElementById('chatInput').focus();
+        document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
+    }
+
+    function fillInput(text) {
+        const inp = document.getElementById('chatInput');
+        inp.value = text;
+        inp.focus();
+        autoResize(inp);
+    }
+
+    function handleKey(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
         }
-        
-        // Note
-        async function createNote() {
-            const title = document.getElementById('noteTitle').value.trim();
-            const content = document.getElementById('noteContent').value.trim();
-            
-            if (!title) {
-                alert('Vui lòng nhập tiêu đề');
-                return;
-            }
-            
-            const loading = document.getElementById('noteLoading');
-            const result = document.getElementById('noteResult');
-            
-            loading.classList.add('active');
-            result.style.display = 'none';
-            
-            try {
-                const response = await fetch(`${API_URL}/api/notes`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        title: title,
-                        content: content || null,
-                        document_ids: uploadedDocuments.map(d => d.id),
-                        auto_generate: true
-                    })
-                });
-                
-                const data = await response.json();
-                
-                result.textContent = data.content;
-                result.style.display = 'block';
-            } catch (error) {
-                result.textContent = '❌ Lỗi: ' + error.message;
-                result.style.display = 'block';
-            } finally {
-                loading.classList.remove('active');
-            }
+    }
+
+    function autoResize(el) {
+        el.style.height = 'auto';
+        el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+    }
+
+    async function sendMessage() {
+        const inp = document.getElementById('chatInput');
+        const msg = inp.value.trim();
+        if (!msg) return;
+
+        const btn = document.getElementById('sendBtn');
+        btn.disabled = true;
+        inp.value = '';
+        inp.style.height = 'auto';
+
+        // Remove empty state
+        document.getElementById('emptyState')?.remove();
+
+        appendBubble(msg, 'user');
+
+        // Typing indicator
+        const typingId = 'typing-' + Date.now();
+        const wrap = document.getElementById('messagesWrap');
+        const typingEl = document.createElement('div');
+        typingEl.id = typingId;
+        typingEl.className = 'bubble ai';
+        typingEl.innerHTML = `
+            <div class="avatar ai">🤖</div>
+            <div class="bubble-content">
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>`;
+        wrap.appendChild(typingEl);
+        wrap.scrollTop = wrap.scrollHeight;
+
+        try {
+            const res = await fetch(`${API}/api/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: msg,
+                    conversation_id: currentConvId,
+                    document_ids: uploadedDocs.map(d => d.id)
+                })
+            });
+
+            const data = await res.json();
+            currentConvId = data.conversation_id;
+
+            // Update title display
+            document.getElementById('convTitleDisplay').textContent = msg.substring(0, 40);
+
+            typingEl.remove();
+            appendBubble(data.response, 'ai');
+            loadHistory(); // Refresh sidebar
+
+        } catch (e) {
+            typingEl.remove();
+            appendBubble('❌ Lỗi kết nối. Vui lòng thử lại.', 'ai');
+        } finally {
+            btn.disabled = false;
+            inp.focus();
         }
-        
-        // Quiz
-        async function createQuiz() {
-            const topic = document.getElementById('quizTopic').value.trim();
-            const num = parseInt(document.getElementById('quizNum').value);
-            const difficulty = document.getElementById('quizDifficulty').value;
-            
-            if (!topic) {
-                alert('Vui lòng nhập chủ đề');
-                return;
-            }
-            
-            const loading = document.getElementById('quizLoading');
-            const result = document.getElementById('quizResult');
-            
-            loading.classList.add('active');
-            result.style.display = 'none';
-            
-            try {
-                const response = await fetch(`${API_URL}/api/quiz`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        topic: topic,
-                        num_questions: num,
-                        difficulty: difficulty,
-                        document_ids: uploadedDocuments.map(d => d.id)
-                    })
-                });
-                
-                const data = await response.json();
-                
-                let html = `<h3>Quiz: ${data.topic}</h3>`;
-                data.questions.forEach((q, i) => {
-                    html += `
-                        <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px;">
-                            <strong>Câu ${i + 1}: ${q.question}</strong><br>
-                            ${q.options.map(opt => `<div style="margin: 5px 0;">${opt}</div>`).join('')}
-                            <div style="margin-top: 10px; padding: 10px; background: #e8f5e9; border-radius: 4px;">
-                                <strong>Đáp án đúng:</strong> ${q.options[q.correct_answer]}<br>
-                                <strong>Giải thích:</strong> ${q.explanation}
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                result.innerHTML = html;
-                result.style.display = 'block';
-            } catch (error) {
-                result.textContent = '❌ Lỗi: ' + error.message;
-                result.style.display = 'block';
-            } finally {
-                loading.classList.remove('active');
-            }
+    }
+
+    function appendBubble(text, role, timestamp = null) {
+        const wrap = document.getElementById('messagesWrap');
+        const isUser = role === 'user';
+        const time = timestamp
+            ? new Date(timestamp).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+            : new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+        const el = document.createElement('div');
+        el.className = 'bubble ' + (isUser ? 'user' : 'ai');
+        el.innerHTML = `
+            <div class="avatar ${isUser ? 'user-av' : 'ai'}">${isUser ? '👤' : '🤖'}</div>
+            <div>
+                <div class="bubble-content">${escHtml(text)}</div>
+                <div class="bubble-time">${time}</div>
+            </div>`;
+        wrap.appendChild(el);
+        wrap.scrollTop = wrap.scrollHeight;
+    }
+
+    // ===== UPLOAD =====
+    async function uploadFile() {
+        const file = document.getElementById('fileInput').files[0];
+        if (!file) return;
+
+        const spinner = document.getElementById('uploadSpinner');
+        spinner.classList.add('active');
+
+        try {
+            const fd = new FormData();
+            fd.append('file', file);
+            const res = await fetch(`${API}/api/documents/upload`, { method: 'POST', body: fd });
+            const data = await res.json();
+            showToast('✅ ' + data.message, 'success');
+            loadDocs();
+        } catch (e) {
+            showToast('❌ Lỗi upload: ' + e.message, 'error');
+        } finally {
+            spinner.classList.remove('active');
         }
-        
-        // Load documents on page load
-        loadDocuments();
-    </script>
+    }
+
+    async function loadDocs() {
+        try {
+            const res = await fetch(`${API}/api/documents`);
+            const data = await res.json();
+            uploadedDocs = data.documents || [];
+            renderDocs();
+        } catch (e) {}
+    }
+
+    function renderDocs() {
+        const grid = document.getElementById('docGrid');
+        if (uploadedDocs.length === 0) {
+            grid.innerHTML = '<p style="color: var(--text-muted); font-size: 13px; margin-top: 10px;">Chưa có tài liệu nào.</p>';
+            return;
+        }
+        grid.innerHTML = uploadedDocs.map(d => `
+            <div class="doc-card">
+                <div class="doc-card-name">${escHtml(d.filename)}</div>
+                <div class="doc-card-type">${d.file_type}</div>
+            </div>
+        `).join('');
+    }
+
+    // ===== MINDMAP =====
+    async function createMindMap() {
+        const topic = document.getElementById('mmTopic').value.trim();
+        if (!topic) { showToast('Vui lòng nhập chủ đề', 'error'); return; }
+
+        const btn = document.getElementById('mmBtn');
+        const spinner = document.getElementById('mmSpinner');
+        const result = document.getElementById('mmResult');
+        btn.disabled = true; spinner.classList.add('active'); result.style.display = 'none';
+
+        try {
+            const res = await fetch(`${API}/api/mindmap`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ topic, depth: parseInt(document.getElementById('mmDepth').value), document_ids: uploadedDocs.map(d => d.id) })
+            });
+            const data = await res.json();
+            result.textContent = JSON.stringify(data, null, 2);
+            result.style.display = 'block';
+        } catch (e) {
+            result.textContent = '❌ Lỗi: ' + e.message; result.style.display = 'block';
+        } finally {
+            btn.disabled = false; spinner.classList.remove('active');
+        }
+    }
+
+    // ===== NOTES =====
+    async function createNote() {
+        const title = document.getElementById('noteTitle').value.trim();
+        if (!title) { showToast('Vui lòng nhập tiêu đề', 'error'); return; }
+
+        const btn = document.getElementById('noteBtn');
+        const spinner = document.getElementById('noteSpinner');
+        const result = document.getElementById('noteResult');
+        btn.disabled = true; spinner.classList.add('active'); result.style.display = 'none';
+
+        try {
+            const res = await fetch(`${API}/api/notes`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, content: document.getElementById('noteContent').value || null, document_ids: uploadedDocs.map(d => d.id), auto_generate: true })
+            });
+            const data = await res.json();
+            result.textContent = data.content;
+            result.style.display = 'block';
+        } catch (e) {
+            result.textContent = '❌ Lỗi: ' + e.message; result.style.display = 'block';
+        } finally {
+            btn.disabled = false; spinner.classList.remove('active');
+        }
+    }
+
+    // ===== QUIZ =====
+    async function createQuiz() {
+        const topic = document.getElementById('quizTopic').value.trim();
+        if (!topic) { showToast('Vui lòng nhập chủ đề', 'error'); return; }
+
+        const btn = document.getElementById('quizBtn');
+        const spinner = document.getElementById('quizSpinner');
+        const result = document.getElementById('quizResult');
+        btn.disabled = true; spinner.classList.add('active'); result.innerHTML = '';
+
+        try {
+            const res = await fetch(`${API}/api/quiz`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ topic, num_questions: parseInt(document.getElementById('quizNum').value), difficulty: document.getElementById('quizDiff').value, document_ids: uploadedDocs.map(d => d.id) })
+            });
+            const data = await res.json();
+
+            let html = `<h3 style="font-size:15px;margin-bottom:14px;color:var(--text-muted)">Quiz: ${escHtml(data.topic)}</h3>`;
+            data.questions.forEach((q, i) => {
+                html += `
+                <div class="quiz-question">
+                    <div class="quiz-q">Câu ${i+1}: ${escHtml(q.question)}</div>
+                    ${q.options.map((opt, idx) => `
+                        <div class="quiz-option ${idx === q.correct_answer ? 'quiz-answer' : ''}">${escHtml(opt)}${idx === q.correct_answer ? ' ✓' : ''}</div>
+                    `).join('')}
+                    <div class="quiz-explanation">💡 ${escHtml(q.explanation)}</div>
+                </div>`;
+            });
+            result.innerHTML = html;
+
+        } catch (e) {
+            result.innerHTML = `<div style="color:var(--danger)">❌ Lỗi: ${e.message}</div>`;
+        } finally {
+            btn.disabled = false; spinner.classList.remove('active');
+        }
+    }
+
+    // ===== RENAME =====
+    function openRename(e, convId, currentTitle) {
+        e.stopPropagation();
+        pendingRenameId = convId;
+        document.getElementById('renameInput').value = currentTitle;
+        document.getElementById('renameModal').classList.add('active');
+        setTimeout(() => document.getElementById('renameInput').focus(), 100);
+    }
+
+    async function confirmRename() {
+        const newTitle = document.getElementById('renameInput').value.trim();
+        if (!newTitle) return;
+
+        try {
+            await fetch(`${API}/api/conversations/${pendingRenameId}/rename`, {
+                method: 'PUT', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: newTitle })
+            });
+            if (currentConvId === pendingRenameId) {
+                document.getElementById('convTitleDisplay').textContent = newTitle;
+            }
+            showToast('✅ Đổi tên thành công', 'success');
+            closeModal('renameModal');
+            loadHistory();
+        } catch (e) {
+            showToast('❌ Lỗi đổi tên', 'error');
+        }
+    }
+
+    // ===== DELETE =====
+    function openDelete(e, convId) {
+        e.stopPropagation();
+        pendingDeleteId = convId;
+        document.getElementById('deleteModal').classList.add('active');
+    }
+
+    async function confirmDelete() {
+        try {
+            await fetch(`${API}/api/conversations/${pendingDeleteId}`, { method: 'DELETE' });
+            if (currentConvId === pendingDeleteId) newChat();
+            showToast('🗑️ Đã xóa hội thoại', 'success');
+            closeModal('deleteModal');
+            loadHistory();
+        } catch (e) {
+            showToast('❌ Lỗi xóa', 'error');
+        }
+    }
+
+    // ===== MODAL =====
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('active');
+        });
+    });
+
+    document.getElementById('renameInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') confirmRename();
+        if (e.key === 'Escape') closeModal('renameModal');
+    });
+
+    // ===== TOAST =====
+    function showToast(msg, type = '') {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = 'toast ' + type;
+        setTimeout(() => t.classList.add('show'), 10);
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ===== UTILS =====
+    function escHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+</script>
 </body>
 </html>
