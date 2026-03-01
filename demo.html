@@ -1607,6 +1607,76 @@
 
     function showQuizSetup() { quizShowView('quiz-view-setup'); }
 
+    // ===== AI QUIZ GENERATION (Anthropic API) =====
+    async function generateQuestionsWithAI(topic, numQuestions, difficulty) {
+        const difficultyMap = {
+            easy: 'dễ, phù hợp học sinh trung bình, áp dụng trực tiếp công thức',
+            medium: 'trung bình, yêu cầu hiểu và vận dụng công thức',
+            hard: 'khó, yêu cầu tư duy cao, kết hợp nhiều kiến thức'
+        };
+
+        const prompt = `Tạo ${numQuestions} câu hỏi trắc nghiệm toán học (cấp 3) về chủ đề: "${topic}".
+Độ khó: ${difficultyMap[difficulty] || difficultyMap.medium}
+
+YÊU CẦU QUAN TRỌNG:
+- Mỗi câu có đúng 4 đáp án (A, B, C, D), chỉ 1 đáp án đúng
+- Đáp án sai phải hợp lý, không quá dễ loại trừ
+- Câu hỏi rõ ràng, chính xác về mặt toán học
+- Giải thích chi tiết tại sao đáp án đúng
+
+Trả về JSON array (KHÔNG có text thêm, CHỈ JSON):
+[
+  {
+    "question": "Nội dung câu hỏi?",
+    "options": ["A. Đáp án 1", "B. Đáp án 2", "C. Đáp án 3", "D. Đáp án 4"],
+    "correct_answer": 0,
+    "explanation": "Giải thích chi tiết vì sao đáp án A đúng...",
+    "difficulty": "${difficulty}"
+  }
+]
+
+correct_answer là index 0-3 (0=A, 1=B, 2=C, 3=D).`;
+
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 1000,
+                messages: [{ role: 'user', content: prompt }]
+            })
+        });
+
+        if (!res.ok) throw new Error(`API lỗi: ${res.status}`);
+        const data = await res.json();
+
+        // Lấy text response
+        const text = data.content.map(b => b.text || '').join('').trim();
+
+        // Parse JSON - xử lý cả trường hợp có ```json wrapper
+        let jsonText = text;
+        if (text.includes('```json')) {
+            jsonText = text.split('```json')[1].split('```')[0].trim();
+        } else if (text.includes('```')) {
+            jsonText = text.split('```')[1].split('```')[0].trim();
+        }
+
+        const questions = JSON.parse(jsonText);
+
+        // Validate cấu trúc
+        if (!Array.isArray(questions) || questions.length === 0) {
+            throw new Error('AI không trả về câu hỏi hợp lệ');
+        }
+
+        return questions.map(q => ({
+            question: q.question || '',
+            options: Array.isArray(q.options) ? q.options : [],
+            correct_answer: typeof q.correct_answer === 'number' ? q.correct_answer : 0,
+            explanation: q.explanation || '',
+            difficulty: q.difficulty || difficulty
+        }));
+    }
+
     async function startQuiz() {
         const topic = document.getElementById('quizTopic').value.trim();
         if (!topic) { showToast('Vui lòng nhập chủ đề', 'error'); return; }
@@ -1616,25 +1686,41 @@
         btn.disabled = true;
         spinner.classList.add('active');
 
-        try {
-            const res = await fetch(`${API}/api/quiz`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    topic,
-                    num_questions: parseInt(document.getElementById('quizNum').value),
-                    difficulty: document.getElementById('quizDiff').value,
-                    document_ids: uploadedDocs.map(d => d.id)
-                })
-            });
-            const data = await res.json();
+        const numQuestions = parseInt(document.getElementById('quizNum').value) || 5;
+        const difficulty = document.getElementById('quizDiff').value || 'medium';
 
-            // Init state
+        try {
+            let questions;
+
+            // Thử gọi AI trực tiếp trước
+            try {
+                questions = await generateQuestionsWithAI(topic, numQuestions, difficulty);
+                showToast('✨ Câu hỏi được tạo bởi AI!', 'success');
+            } catch (aiErr) {
+                console.warn('AI trực tiếp thất bại, thử backend:', aiErr.message);
+
+                // Fallback: gọi backend FastAPI
+                const res = await fetch(`${API}/api/quiz`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        topic,
+                        num_questions: numQuestions,
+                        difficulty,
+                        document_ids: uploadedDocs.map(d => d.id)
+                    })
+                });
+                if (!res.ok) throw new Error('Backend cũng thất bại');
+                const data = await res.json();
+                questions = data.questions;
+            }
+
+            // Init quiz state
             quizState = {
-                quizId: data.quiz_id,
-                topic: data.topic,
-                difficulty: data.difficulty,
-                questions: data.questions,
+                quizId: 'ai-' + Date.now(),
+                topic,
+                difficulty,
+                questions,
                 currentIdx: 0,
                 answers: [],
                 answered: false
@@ -1645,6 +1731,7 @@
 
         } catch (e) {
             showToast('❌ Lỗi tạo quiz: ' + e.message, 'error');
+            console.error(e);
         } finally {
             btn.disabled = false;
             spinner.classList.remove('active');

@@ -1,0 +1,136 @@
+[
+  {
+    "id": "0f01b64e-e863-4d40-8aae-0515ad741941",
+    "quiz_id": "ai-1772330954346",
+    "topic": "đạo hàm",
+    "difficulty": "medium",
+    "total_questions": 5,
+    "correct_count": 0,
+    "score": 0.0,
+    "answers": [
+      {
+        "question_index": 0,
+        "question": "Cho hàm số `f(x) = (3x^2 - 1)^4`. Đạo hàm `f'(x)` là gì?",
+        "options": [
+          "A. 4(3x^2 - 1)^3",
+          "B. 24x(3x^2 - 1)^3",
+          "C. 6x(3x^2 - 1)^3",
+          "D. 4(6x)^3"
+        ],
+        "correct_answer": 1,
+        "user_answer": 0,
+        "is_correct": false,
+        "explanation": "Để tìm đạo hàm của `f(x) = (3x^2 - 1)^4`, chúng ta sử dụng quy tắc chuỗi (Chain Rule).\nĐặt `u = 3x^2 - 1`. Khi đó `f(x) = u^4`.\nĐạo hàm của `u^4` theo `u` là `4u^3`.\nĐạo hàm của `u = 3x^2 - 1` theo `x` là `u' = 6x`.\nÁp dụng quy tắc chuỗi: `f'(x) = d/du(u^4) * du/dx = 4u^3 * u'`.\nThay `u` và `u'` trở lại: `f'(x) = 4(3x^2 - 1)^3 * (6x)`.\nSắp xếp lại: `f'(x) = 24x(3x^2 - 1)^3`."
+      },
+      {
+        "question_index": 1,
+        "question": "Tìm đạo hàm của hàm số `f(x) = x * sin(2x)`.",
+        "options": [
+          "A. sin(2x) + xcos(2x)",
+          "B. cos(2x)",
+          "C. sin(2x) + 2xcos(2x)",
+          "D. cos(2x) + 2xsin(2x)"
+        ],
+        "correct_answer": 2,
+        "user_answer": 1,
+        "is_correct": false,
+        "explanation": "Để tìm đạo hàm của `f(x) = x * sin(2x)`, chúng ta sử dụng quy tắc tích (Product Rule): `(uv)' = u'v + uv'`.\nĐặt `u = x` và `v = sin(2x)`.\nĐạo hàm của `u = x` là `u' = 1`.\nĐạo hàm của `v = sin(2x)` đòi hỏi quy tắc chuỗi. Đặt `w = 2x`, vậy `v = sin(w)`. `dv/dw = cos(w)`. `dw/dx = 2`.\nVậy `v' = cos(2x) * 2 = 2cos(2x)`.\nÁp dụng quy tắc tích: `f'(x) = u'v + uv' = (1) * sin(2x) + (x) * (2cos(2x))`.\n`f'(x) = sin(2x) + 2xcos(2x)`."
+      },
+      {
+        "question_index": 2,
+        "question": "Đạo hàm của hàm số `f(x) = (x^2 + 1) / (x - 1)` là gì?",
+        "options": [
+          "A. (2x - 1) / (x - 1)^2",
+          "B. (x^2 - 2x - 1) / (x - 1)^2",
+          "C. (x^2 + 2x + 1) / (x - 1)^2",
+          "D. (x^2 - 2x - 1) / (x - 1)"
+        ],
+        "correct_answer": 1,
+        "user_answer": 2,
+        "is_correct": false,
+        "explanation": "Để tìm đạo hàm của `f(x) = (x^2 + 1) / (x - 1)`, chúng ta sử dụng quy tắc thương (Quotient Rule): `(u/v)' = (u'v - uv') / v^2`.\nĐặt `u = x^2 + 1` và `v = x - 1`.\nĐạo hàm của `u = x^2 + 1` là `u' = 2x`.\nĐạo hàm của `v = x - 1` là `v' = 1`.\nÁp dụng quy tắc thương: `f'(x) = ( (2x)(x - 1) - (x^2 + 1)(1) ) / (x - 1)^2`.\nKhai triển tử số: `2x^2 - 2x - x^2 - 1`.\nVậy tử số là `x^2 - 2x - 1`.\nKết quả cuối cùng: `f'(x) = (x^2 - 2x - 1) / (x - 1)^2`."
+      },
+      {
+        "question_index": 3,
+        "question": "Cho hàm số `f(x) = e^(2x^2)`. Đạo hàm `f'(x)` bằng:",
+        "options": [
+          "A. e^(2x^2)",
+          "B. 2x * e^(2x^2)",
+          "C. 4x * e^(2x^2)",
+          "D. e^(4x)"
+        ],
+        "correct_answer": 2,
+        "user_answer": 1,
+        "is_correct": false,
+        "explanation": "Để tìm đạo hàm của `f(x) = e^(2x^2)`, chúng ta sử dụng quy tắc chuỗi cho hàm mũ: `d/dx(e^u) = e^u * du/dx`.\nĐặt `u = 2x^2`.\nĐạo hàm của `u` theo `x` là `du/dx = d/dx(2x^2) = 4x`.\nÁp dụng công thức: `f'(x) = e^(2x^2) * (4x)`.\nSắp xếp lại: `f'(x) = 4x * e^(2x^2)`."
+      },
+      {
+        "question_index": 4,
+        "question": "Cho phương trình `x^3 + y^3 = 6xy`. Tìm `dy/dx` bằng phương pháp đạo hàm ẩn.",
+        "options": [
+          "A. (x^2 - 2y) / (2x - y^2)",
+          "B. (2y - x^2) / (y^2 - 2x)",
+          "C. (6xy - 3x^2) / (3y^2 - 6xy)",
+          "D. (3x^2 + 6y) / (3y^2 + 6x)"
+        ],
+        "correct_answer": 1,
+        "user_answer": 3,
+        "is_correct": false,
+        "explanation": "Để tìm `dy/dx` cho phương trình `x^3 + y^3 = 6xy`, chúng ta đạo hàm cả hai vế theo `x`:\n1. Đạo hàm của `x^3` là `3x^2`.\n2. Đạo hàm của `y^3` (coi `y` là hàm của `x`) là `3y^2 * (dy/dx)` (theo quy tắc chuỗi).\n3. Đạo hàm của `6xy` (sử dụng quy tắc tích: `(uv)' = u'v + uv'`) là `6 * (1*y + x*(dy/dx)) = 6y + 6x(dy/dx)`.\n\nVậy, phương trình đạo hàm là: `3x^2 + 3y^2 * (dy/dx) = 6y + 6x * (dy/dx)`.\n\nBây giờ, chúng ta cần nhóm các hạng tử chứa `dy/dx` sang một vế và các hạng tử còn lại sang vế kia:\n`3y^2 * (dy/dx) - 6x * (dy/dx) = 6y - 3x^2`\n\nĐặt `dy/dx` làm thừa số chung:\n`(dy/dx) * (3y^2 - 6x) = 6y - 3x^2`\n\nCuối cùng, giải cho `dy/dx`:\n`dy/dx = (6y - 3x^2) / (3y^2 - 6x)`\n\nCó thể rút gọn bằng cách chia cả tử và mẫu cho 3:\n`dy/dx = (2y - x^2) / (y^2 - 2x)`."
+      }
+    ],
+    "completed_at": "2026-03-01T09:09:25.570737"
+  },
+  {
+    "id": "27f4775c-6228-4d33-82c3-058f84f33cc1",
+    "quiz_id": "ai-1772330654336",
+    "topic": "đạo hàm",
+    "difficulty": "medium",
+    "total_questions": 1,
+    "correct_count": 0,
+    "score": 0.0,
+    "answers": [
+      {
+        "question_index": 0,
+        "question": "Câu hỏi về đạo hàm?",
+        "options": [
+          "A. Đáp án 1",
+          "B. Đáp án 2",
+          "C. Đáp án 3",
+          "D. Đáp án 4"
+        ],
+        "correct_answer": 0,
+        "user_answer": 1,
+        "is_correct": false,
+        "explanation": "Vui lòng thử lại để tạo câu hỏi chi tiết hơn."
+      }
+    ],
+    "completed_at": "2026-03-01T09:04:17.408945"
+  },
+  {
+    "id": "f397ce74-4096-4ddb-a75e-9577758eaf63",
+    "quiz_id": "b5c3fece-b9df-4494-9226-30fcf835c693",
+    "topic": "phân số",
+    "difficulty": "easy",
+    "total_questions": 1,
+    "correct_count": 0,
+    "score": 0.0,
+    "answers": [
+      {
+        "question_index": 0,
+        "question": "Câu hỏi về phân số?",
+        "options": [
+          "A. Đáp án 1",
+          "B. Đáp án 2",
+          "C. Đáp án 3",
+          "D. Đáp án 4"
+        ],
+        "correct_answer": 0,
+        "user_answer": 1,
+        "is_correct": false,
+        "explanation": "Vui lòng thử lại để tạo câu hỏi chi tiết hơn."
+      }
+    ],
+    "completed_at": "2026-03-01T08:15:25.953647"
+  }
+]
