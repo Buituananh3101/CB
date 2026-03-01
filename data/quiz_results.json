@@ -1,5 +1,87 @@
 [
   {
+    "id": "62d37d4c-2896-4c06-9448-04481d780aaf",
+    "quiz_id": "ai-1772338672271",
+    "topic": "phân số",
+    "difficulty": "medium",
+    "total_questions": 5,
+    "correct_count": 3,
+    "score": 60.0,
+    "answers": [
+      {
+        "question_index": 0,
+        "question": "Sắp xếp các phân số sau theo thứ tự tăng dần: 2/3, 5/6, 3/4.",
+        "options": [
+          "A. 2/3, 3/4, 5/6",
+          "B. 5/6, 3/4, 2/3",
+          "C. 3/4, 2/3, 5/6",
+          "D. 2/3, 5/6, 3/4"
+        ],
+        "correct_answer": 0,
+        "user_answer": 2,
+        "is_correct": false,
+        "explanation": "Để sắp xếp các phân số, ta cần quy đồng mẫu số. Mẫu số chung nhỏ nhất của 3, 6, 4 là 12.\n- 2/3 = (2 × 4) / (3 × 4) = 8/12\n- 5/6 = (5 × 2) / (6 × 2) = 10/12\n- 3/4 = (3 × 3) / (4 × 3) = 9/12\nSo sánh các tử số: 8 < 9 < 10.\nVậy thứ tự tăng dần là: 8/12, 9/12, 10/12, tương ứng với 2/3, 3/4, 5/6."
+      },
+      {
+        "question_index": 1,
+        "question": "Tính giá trị biểu thức: 7/12 + 1/4 - 1/6.",
+        "options": [
+          "A. 2/3",
+          "B. 1/2",
+          "C. 5/12",
+          "D. 7/12"
+        ],
+        "correct_answer": 0,
+        "user_answer": 0,
+        "is_correct": true,
+        "explanation": "Để tính biểu thức, ta cần quy đồng mẫu số. Mẫu số chung nhỏ nhất của 12, 4, 6 là 12.\n- Giữ nguyên 7/12.\n- 1/4 = (1 × 3) / (4 × 3) = 3/12.\n- 1/6 = (1 × 2) / (6 × 2) = 2/12.\nBiểu thức trở thành: 7/12 + 3/12 - 2/12 = (7 + 3 - 2) / 12 = 8/12.\nRút gọn phân số 8/12 bằng cách chia cả tử và mẫu cho 4: 8/12 = 2/3."
+      },
+      {
+        "question_index": 2,
+        "question": "Một mảnh vườn hình chữ nhật có chiều dài 5/4 mét và chiều rộng 2/3 mét. Tính diện tích mảnh vườn đó.",
+        "options": [
+          "A. 5/6 m²",
+          "B. 7/12 m²",
+          "C. 10/12 m²",
+          "D. 5/12 m²"
+        ],
+        "correct_answer": 0,
+        "user_answer": 0,
+        "is_correct": true,
+        "explanation": "Diện tích hình chữ nhật được tính bằng công thức: Chiều dài × Chiều rộng.\nDiện tích = (5/4) mét × (2/3) mét\nDiện tích = (5 × 2) / (4 × 3) = 10 / 12 mét vuông.\nRút gọn phân số 10/12 bằng cách chia cả tử và mẫu cho 2: 10/12 = 5/6 mét vuông."
+      },
+      {
+        "question_index": 3,
+        "question": "Một cuộn dây dài 3 và 3/4 mét được chia thành các đoạn bằng nhau, mỗi đoạn dài 3/8 mét. Hỏi cuộn dây được chia thành bao nhiêu đoạn?",
+        "options": [
+          "A. 8 đoạn",
+          "B. 10 đoạn",
+          "C. 12 đoạn",
+          "D. 9 đoạn"
+        ],
+        "correct_answer": 1,
+        "user_answer": 0,
+        "is_correct": false,
+        "explanation": "Đầu tiên, đổi số hỗn số 3 và 3/4 thành phân số: 3 và 3/4 = (3 × 4 + 3) / 4 = 15/4 mét.\nĐể tìm số đoạn, ta thực hiện phép chia tổng chiều dài cuộn dây cho chiều dài mỗi đoạn:\nSố đoạn = (15/4) ÷ (3/8)\nKhi chia phân số, ta nhân với nghịch đảo của phân số thứ hai:\nSố đoạn = (15/4) × (8/3)\nThực hiện phép nhân và rút gọn:\nSố đoạn = (15 × 8) / (4 × 3) = 120 / 12 = 10.\nVậy, cuộn dây được chia thành 10 đoạn."
+      },
+      {
+        "question_index": 4,
+        "question": "Trong một lớp học có 2/5 số học sinh là nữ. Biết rằng có 18 học sinh nam. Hỏi lớp học đó có tổng cộng bao nhiêu học sinh?",
+        "options": [
+          "A. 30 học sinh",
+          "B. 45 học sinh",
+          "C. 50 học sinh",
+          "D. 60 học sinh"
+        ],
+        "correct_answer": 0,
+        "user_answer": 0,
+        "is_correct": true,
+        "explanation": "Nếu 2/5 số học sinh là nữ, thì số học sinh nam chiếm phần còn lại của lớp, tức là:\nPhần học sinh nam = 1 - 2/5 = 5/5 - 2/5 = 3/5 tổng số học sinh.\nChúng ta biết rằng có 18 học sinh nam, và 18 học sinh này tương ứng với 3/5 tổng số học sinh của lớp.\nĐể tìm tổng số học sinh, ta có thể tính:\nTổng số học sinh = (Số học sinh nam) ÷ (Phần học sinh nam)\nTổng số học sinh = 18 ÷ (3/5)\nKhi chia cho phân số, ta nhân với nghịch đảo của phân số đó:\nTổng số học sinh = 18 × (5/3)\nTổng số học sinh = (18 × 5) / 3 = 90 / 3 = 30 học sinh.\nVậy, lớp học đó có tổng cộng 30 học sinh."
+      }
+    ],
+    "completed_at": "2026-03-01T11:18:30.932080"
+  },
+  {
     "id": "0f01b64e-e863-4d40-8aae-0515ad741941",
     "quiz_id": "ai-1772330954346",
     "topic": "đạo hàm",
