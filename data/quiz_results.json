@@ -1,5 +1,31 @@
 [
   {
+    "id": "ef12da28-a282-46d3-bb2a-ff99e3e62148",
+    "quiz_id": "ai-1773580653725",
+    "topic": "ôn đạo hàm",
+    "difficulty": "medium",
+    "total_questions": 1,
+    "correct_count": 1,
+    "score": 100.0,
+    "answers": [
+      {
+        "question_index": 0,
+        "question": "Câu hỏi về ôn đạo hàm?",
+        "options": [
+          "A. Đáp án 1",
+          "B. Đáp án 2",
+          "C. Đáp án 3",
+          "D. Đáp án 4"
+        ],
+        "correct_answer": 0,
+        "user_answer": 0,
+        "is_correct": true,
+        "explanation": "Vui lòng thử lại để tạo câu hỏi chi tiết hơn."
+      }
+    ],
+    "completed_at": "2026-03-15T20:17:36.277650"
+  },
+  {
     "id": "62d37d4c-2896-4c06-9448-04481d780aaf",
     "quiz_id": "ai-1772338672271",
     "topic": "phân số",
