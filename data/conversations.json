@@ -66,5 +66,168 @@
     "document_ids": [],
     "created_at": "2026-03-01T09:05:05.355080",
     "updated_at": "2026-03-01T09:08:37.176958"
+  },
+  "ebd511b6-18ea-4547-a22d-0023129ce9ab": {
+    "id": "ebd511b6-18ea-4547-a22d-0023129ce9ab",
+    "title": "Giải phương trình bậc 2: x² - 5x + 6 = 0",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Giải phương trình bậc 2: x² - 5x + 6 = 0",
+        "timestamp": "2026-03-01T11:26:25.860177"
+      },
+      {
+        "role": "assistant",
+        "content": "Xin lỗi, đã có lỗi xảy ra: 403 Your API key was reported as leaked. Please use another API key.. Vui lòng thử lại.",
+        "timestamp": "2026-03-01T11:26:26.207812"
+      }
+    ],
+    "document_ids": [],
+    "created_at": "2026-03-01T11:26:25.858678",
+    "updated_at": "2026-03-01T11:26:26.207812"
+  },
+  "e1c2ea39-9679-466a-a52b-2d453d8fc32d": {
+    "id": "e1c2ea39-9679-466a-a52b-2d453d8fc32d",
+    "title": "1+1",
+    "messages": [
+      {
+        "role": "user",
+        "content": "1+1",
+        "timestamp": "2026-03-14T17:02:40.164814"
+      },
+      {
+        "role": "assistant",
+        "content": "Xin lỗi, đã có lỗi xảy ra: 403 Your API key was reported as leaked. Please use another API key.. Vui lòng thử lại.",
+        "timestamp": "2026-03-14T17:02:40.974942"
+      },
+      {
+        "role": "user",
+        "content": "1+1",
+        "timestamp": "2026-03-14T17:03:41.213741"
+      },
+      {
+        "role": "assistant",
+        "content": "Xin lỗi, đã có lỗi xảy ra: 403 Your API key was reported as leaked. Please use another API key.. Vui lòng thử lại.",
+        "timestamp": "2026-03-14T17:03:41.295478"
+      }
+    ],
+    "document_ids": [],
+    "created_at": "2026-03-14T17:02:40.164814",
+    "updated_at": "2026-03-14T17:03:41.295478"
+  },
+  "c3a3ce6d-9812-4a08-89b7-85b42e4f856d": {
+    "id": "c3a3ce6d-9812-4a08-89b7-85b42e4f856d",
+    "title": "1+1",
+    "messages": [
+      {
+        "role": "user",
+        "content": "1+1",
+        "timestamp": "2026-03-14T17:04:16.357288"
+      },
+      {
+        "role": "assistant",
+        "content": "Chào em! Rất vui được hỗ trợ em học Toán nhé!\n\nĐây là một câu hỏi rất cơ bản nhưng lại là nền tảng của mọi phép tính khác trong Toán học đấy.\n\nKết quả của **1 + 1** là **2**.\n\n**Giải thích đơn giản:**\n\nEm hình dung thế này nhé:\n*   Em có **1** quả táo.\n*   Sau đó, em được cho thêm **1** quả táo nữa.\n*   Vậy tổng cộng em sẽ có **2** quả táo phải không nào?\n\nPhép cộng (+) có nghĩa là mình gộp lại hoặc thêm vào. Khi mình có một vật và mình thêm một vật tương tự nữa, thì tổng số vật mình có sẽ là hai.\n\nEm thấy không, ngay cả những phép tính đơn giản nhất cũng có ý nghĩa riêng của nó và là bước khởi đầu cho những kiến thức phức tạp hơn sau này.\n\nEm cứ tự nhiên hỏi nhé, không có câu hỏi nào là quá đơn giản hay ngớ ngẩn đâu! Em có muốn thử một phép tính cộng khác không?",
+        "timestamp": "2026-03-14T17:04:20.285123"
+      }
+    ],
+    "document_ids": [],
+    "created_at": "2026-03-14T17:04:16.357288",
+    "updated_at": "2026-03-14T17:04:20.285123"
+  },
+  "9902c91f-d385-4054-a2e3-f291200872e4": {
+    "id": "9902c91f-d385-4054-a2e3-f291200872e4",
+    "title": "2+2",
+    "messages": [
+      {
+        "role": "user",
+        "content": "2+2",
+        "timestamp": "2026-03-14T17:05:58.250898"
+      },
+      {
+        "role": "assistant",
+        "content": "Chào em! Đây là một câu hỏi rất cơ bản nhưng lại là nền tảng quan trọng của toán học đấy!\n\nKhi em thấy `2 + 2`, phép tính này nghĩa là chúng ta đang gộp hai nhóm lại với nhau.\n\n**Hãy cùng hình dung nhé:**\n\n1.  Em có **2** quả táo.\n2.  Sau đó, mẹ em cho em thêm **2** quả táo nữa.\n\n**Vậy, tổng cộng em có bao nhiêu quả táo?**\n\nĐể tìm tổng số, chúng ta sẽ đếm tất cả các quả táo mà em có:\n*   Ban đầu em có 1, 2 quả.\n*   Thêm 1, 2 quả nữa.\n*   Nếu đếm từ đầu đến cuối, chúng ta sẽ có: 1, 2, 3, 4 quả táo.\n\nVậy, **2 + 2 = 4**.\n\nPhép cộng là một phép tính cơ bản giúp chúng ta kết hợp các số lượng lại với nhau. Em cứ nhớ, khi có dấu `+` giữa hai số, nghĩa là em đang \"thêm vào\" hoặc \"gộp lại\" chúng nhé!\n\nEm có muốn thử một phép cộng khác không? Hoặc có câu hỏi gì về phép cộng không nào?",
+        "timestamp": "2026-03-14T17:06:04.216037"
+      }
+    ],
+    "document_ids": [],
+    "created_at": "2026-03-14T17:05:58.250898",
+    "updated_at": "2026-03-14T17:06:04.216037"
+  },
+  "f0bde469-b172-40d2-a617-d5594a5becdd": {
+    "id": "f0bde469-b172-40d2-a617-d5594a5becdd",
+    "title": "1+1",
+    "messages": [
+      {
+        "role": "user",
+        "content": "1+1",
+        "timestamp": "2026-03-15T19:39:19.196725"
+      },
+      {
+        "role": "assistant",
+        "content": "Chào em! Đây là một câu hỏi rất cơ bản và quan trọng để chúng ta bắt đầu tìm hiểu về phép toán cộng đấy!\n\nKhi em thấy phép tính `1 + 1`, chúng ta sẽ hiểu như sau nhé:\n\n1.  **Dấu `+` (dấu cộng) nghĩa là gì?**\n    Dấu cộng có nghĩa là mình đang *gộp lại*, *thêm vào*, hoặc *kết hợp* các số lượng lại với nhau để tìm ra tổng số lượng.\n\n2.  **Hãy hình dung bằng một ví dụ cụ thể nhé:**\n    *   Giả sử em có **1** quả táo 🍎.\n    *   Sau đó, mẹ em cho em thêm **1** quả táo 🍎 nữa.\n    *   Vậy, nếu em gộp cả hai quả táo lại, em sẽ có tổng cộng bao nhiêu quả táo nhỉ?\n\n    Chắc chắn là em sẽ có **2** quả táo đúng không nào?\n\n3.  **Vậy nên, `1 + 1 = 2`**\n\nPhép cộng `1 + 1 = 2` là một trong những phép tính cơ bản nhất và là nền tảng cho mọi phép tính phức tạp hơn sau này đấy!\n\nEm thấy có dễ hiểu không? Nếu em có bất kỳ câu hỏi nào khác về phép cộng hoặc muốn thử các ví dụ khác, đừng ngần ngại hỏi nhé!",
+        "timestamp": "2026-03-15T19:39:25.638209"
+      }
+    ],
+    "document_ids": [],
+    "created_at": "2026-03-15T19:39:19.196725",
+    "updated_at": "2026-03-15T19:39:25.638209"
+  },
+  "93c333d9-425e-462a-a968-e3fd2049a4ca": {
+    "id": "93c333d9-425e-462a-a968-e3fd2049a4ca",
+    "title": "8+0",
+    "messages": [
+      {
+        "role": "user",
+        "content": "8+0",
+        "timestamp": "2026-03-15T20:07:02.198554"
+      },
+      {
+        "role": "assistant",
+        "content": "Chào em! Rất vui được giúp em học Toán nhé!\n\nCâu hỏi của em là một phép tính cộng rất cơ bản: **8 + 0**.\n\nĐể giải bài này, chúng ta cần nhớ một tính chất quan trọng của phép cộng:\n\n1.  **Thực hiện phép tính:**\n    8 + 0 = **8**\n\n2.  **Giải thích \"tại sao\":**\n    Phép cộng với số 0 có một tính chất đặc biệt, được gọi là **tính chất đơn vị của phép cộng** (hay còn gọi là tính chất trung hòa của số 0). Tính chất này nói rằng:\n    *   Khi em cộng số 0 vào bất kỳ số nào, kết quả sẽ luôn là chính số đó. Số 0 không làm thay đổi giá trị của số kia.\n\n    **Ví dụ minh họa:**\n    *   Hãy tưởng tượng em có 8 cái kẹo trong túi.\n    *   Sau đó, mẹ không cho thêm em cái kẹo nào cả (tức là mẹ cho em thêm 0 cái kẹo).\n    *   Vậy tổng cộng em vẫn có 8 cái kẹo.\n\n    Tương tự:\n    *   5 + 0 = 5\n    *   100 + 0 = 100\n    *   x + 0 = x (với x là bất kỳ số nào)\n\nVậy, 8 + 0 = **8** vì số 0 là phần tử trung hòa trong phép cộng, nó không làm thay đổi giá trị của số được cộng.\n\nEm thấy đó, dù là những phép tính đơn giản nhất cũng có nguyên tắc riêng của nó! Có câu hỏi nào khác hay em muốn tìm hiểu thêm về các tính chất khác của phép cộng không? Đừng ngần ngại hỏi nhé!",
+        "timestamp": "2026-03-15T20:07:07.080006"
+      },
+      {
+        "role": "user",
+        "content": "độ dài véc tơ",
+        "timestamp": "2026-03-15T20:08:40.768343"
+      },
+      {
+        "role": "assistant",
+        "content": "Chào em! Rất vui được tiếp tục hỗ trợ em học Toán nhé!\n\nCâu hỏi của em về **\"độ dài véc tơ\"** là một khái niệm rất quan trọng trong hình học phẳng và hình học không gian.\n\n### 1. Khái niệm \"Độ dài véc tơ\" là gì?\n\n*   **Về mặt ý nghĩa:** Em hãy hình dung một véc tơ như một mũi tên. Độ dài của véc tơ chính là **độ dài của mũi tên đó**, hay còn gọi là **độ lớn** của véc tơ. Nó cho chúng ta biết \"cái véc tơ này dài bao nhiêu\" mà không quan tâm đến hướng của nó.\n*   **Ký hiệu:** Độ dài của véc tơ $\\vec{a}$ thường được ký hiệu là $|\\vec{a}|$ hoặc $\\|\\vec{a}\\|$.\n\n### 2. Công thức tính độ dài véc tơ\n\nCách tính độ dài véc tơ sẽ phụ thuộc vào việc em đang làm việc trong mặt phẳng (2D) hay trong không gian (3D).\n\n#### a) Trong mặt phẳng tọa độ Oxy (2D)\n\nNếu em có một véc tơ $\\vec{u}$ với các thành phần tọa độ là $(x; y)$, thì độ dài của véc tơ $\\vec{u}$ được tính bằng công thức:\n\n$|\\vec{u}| = \\sqrt{x^2 + y^2}$\n\n**Giải thích \"tại sao\":**\nCông thức này thực chất là ứng dụng của **Định lý Pythagoras**.\nHãy tưởng tượng em vẽ véc tơ $\\vec{u} = (x; y)$ từ gốc tọa độ O(0;0) đến điểm P(x;y).\nKhi đó, em sẽ tạo thành một tam giác vuông với các cạnh góc vuông có độ dài là $|x|$ và $|y|$. Cạnh huyền của tam giác vuông này chính là độ dài của véc tơ $\\vec{u}$.\nTheo Định lý Pythagoras: (Cạnh huyền)$^2$ = (Cạnh góc vuông 1)$^2$ + (Cạnh góc vuông 2)$^2$\n$\\Rightarrow |\\vec{u}|^2 = x^2 + y^2$\n$\\Rightarrow |\\vec{u}| = \\sqrt{x^2 + y^2}$\n\n#### b) Trong không gian tọa độ Oxyz (3D)\n\nNếu em có một véc tơ $\\vec{v}$ với các thành phần tọa độ là $(x; y; z)$, thì độ dài của véc tơ $\\vec{v}$ được tính bằng công thức:\n\n$|\\vec{v}| = \\sqrt{x^2 + y^2 + z^2}$\n\n**Giải thích \"tại sao\":**\nĐây là sự mở rộng của Định lý Pythagoras trong không gian 3 chiều. Em có thể hình dung nó bằng cách áp dụng định lý Pythagoras hai lần.\n\n#### c) Độ dài véc tơ khi biết hai điểm đầu và cuối\n\nNếu véc tơ $\\vec{AB}$ có điểm đầu là $A(x_A; y_A)$ và điểm cuối là $B(x_B; y_B)$ (trong 2D):\n1.  Đầu tiên, em cần tìm tọa độ của véc tơ $\\vec{AB}$:\n    $\\vec{AB} = (x_B - x_A; y_B - y_A)$\n2.  Sau đó, áp dụng công thức tính độ dài véc tơ như trên:\n    $|\\vec{AB}| = \\sqrt{(x_B - x_A)^2 + (y_B - y_A)^2}$\n\nĐây chính là **công thức tính khoảng cách giữa hai điểm A và B** trong hình học phẳng!\n\nNếu là trong không gian 3D, với $A(x_A; y_A; z_A)$ và $B(x_B; y_B; z_B)$:\n1.  $\\vec{AB} = (x_B - x_A; y_B - y_A; z_B - z_A)$\n2.  $|\\vec{AB}| = \\sqrt{(x_B - x_A)^2 + (y_B - y_A)^2 + (z_B - z_A)^2}$\n\n### 3. Ví dụ minh họa\n\nĐể em dễ hình dung hơn, chúng ta hãy cùng xem xét vài ví dụ cụ thể nhé!\n\n**Ví dụ 1: Trong mặt phẳng Oxy (2D)**\n\nCho véc tơ $\\vec{a} = (3; 4)$. Hãy tính độ dài của véc tơ $\\vec{a}$.\n\n*   **Bước 1: Xác định các thành phần tọa độ của véc tơ.**\n    Véc tơ $\\vec{a}$ có $x = 3$ và $y = 4$.\n*   **Bước 2: Áp dụng công thức.**\n    $|\\vec{a}| = \\sqrt{x^2 + y^2} = \\sqrt{3^2 + 4^2}$\n*   **Bước 3: Thực hiện phép tính.**\n    $|\\vec{a}| = \\sqrt{9 + 16} = \\sqrt{25}$\n    $|\\vec{a}| = 5$\n\nVậy, độ dài của véc tơ $\\vec{a}$ là 5.\n\n**Ví dụ 2: Trong không gian Oxyz (3D)**\n\nCho véc tơ $\\vec{b} = (1; -2; 2)$. Hãy tính độ dài của véc tơ $\\vec{b}$.\n\n*   **Bước 1: Xác định các thành phần tọa độ của véc tơ.**\n    Véc tơ $\\vec{b}$ có $x = 1$, $y = -2$ và $z = 2$.\n*   **Bước 2: Áp dụng công thức.**\n    $|\\vec{b}| = \\sqrt{x^2 + y^2 + z^2} = \\sqrt{1^2 + (-2)^2 + 2^2}$\n*   **Bước 3: Thực hiện phép tính.**\n    $|\\vec{b}| = \\sqrt{1 + 4 + 4} = \\sqrt{9}$\n    $|\\vec{b}| = 3$\n\nVậy, độ dài của véc tơ $\\vec{b}$ là 3.\n\n**Ví dụ 3: Tính độ dài véc tơ khi biết hai điểm A và B (trong 2D)**\n\nCho hai điểm $A(1; 2)$ và $B(5; 5)$. Hãy tính độ dài của véc tơ $\\vec{AB}$.\n\n*   **Bước 1: Tìm tọa độ của véc tơ $\\vec{AB}$.**\n    $\\vec{AB} = (x_B - x_A; y_B - y_A) = (5 - 1; 5 - 2) = (4; 3)$\n*   **Bước 2: Áp dụng công thức tính độ dài cho véc tơ $\\vec{AB}$.**\n    $|\\vec{AB}| = \\sqrt{4^2 + 3^2}$\n*   **Bước 3: Thực hiện phép tính.**\n    $|\\vec{AB}| = \\sqrt{16 + 9} = \\sqrt{25}$\n    $|\\vec{AB}| = 5$\n\nVậy, độ dài của véc tơ $\\vec{AB}$ là 5.\n\nHy vọng với phần giải thích chi tiết về khái niệm, công thức và các ví dụ minh họa này, em đã nắm rõ hơn về \"độ dài véc tơ\" rồi nhé!\n\nEm có muốn thử tự làm một bài tập nhỏ không? Hoặc có câu hỏi nào khác liên quan đến véc tơ mà em muốn tìm hiểu thêm không? Đừng ngần ngại hỏi nha!",
+        "timestamp": "2026-03-15T20:08:55.926394"
+      }
+    ],
+    "document_ids": [],
+    "created_at": "2026-03-15T20:07:02.198554",
+    "updated_at": "2026-03-15T20:08:55.926394"
+  },
+  "d3ab58a7-ee2e-435d-b8f0-55f42dca2c4c": {
+    "id": "d3ab58a7-ee2e-435d-b8f0-55f42dca2c4c",
+    "title": "Giải phương trình bậc 2: x² - 5x + 6 = 0",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Giải phương trình bậc 2: x² - 5x + 6 = 0",
+        "timestamp": "2026-03-15T20:09:11.325740"
+      },
+      {
+        "role": "assistant",
+        "content": "Chào bạn! Đây là một phương trình bậc hai khá quen thuộc: `x² - 5x + 6 = 0`. Chúng ta sẽ cùng nhau giải quyết nó nhé.\n\nĐể giải phương trình bậc hai, chúng ta có một vài phương pháp phổ biến như:\n1.  **Phân tích thành nhân tử:** Phương pháp này thường nhanh và hiệu quả khi các số khá đẹp.\n2.  **Sử dụng công thức nghiệm tổng quát:** Đây là phương pháp \"cứu cánh\" cho mọi phương trình bậc hai, dù số có phức tạp đến đâu.\n3.  **Hoàn thành bình phương:** Một cách khác nhưng ít phổ biến hơn trong việc giải trực tiếp.\n\nVới phương trình `x² - 5x + 6 = 0`, mình thấy cách phân tích thành nhân tử khá phù hợp và dễ làm. Bạn có muốn thử cách này trước không?\n\n---\n\n**Phương pháp 1: Phân tích thành nhân tử**\n\nDạng tổng quát của phương trình bậc hai là `ax² + bx + c = 0`. Với phương trình của bạn: `x² - 5x + 6 = 0`, chúng ta có:\n*   `a = 1` (hệ số của `x²`)\n*   `b = -5` (hệ số của `x`)\n*   `c = 6` (hệ số tự do)\n\nĐể phân tích thành nhân tử, chúng ta cần tìm hai số `m` và `n` sao cho:\n*   `m * n = c` (tích của chúng bằng hệ số tự do `c`)\n*   `m + n = b` (tổng của chúng bằng hệ số của `x`, tức `b`)\n\nTrong trường hợp này:\n*   `m * n = 6`\n*   `m + n = -5`\n\nBạn thử nghĩ xem có cặp số nguyên nào thỏa mãn điều kiện này không? (Gợi ý: Hãy nghĩ đến các cặp số có tích bằng 6, sau đó xem cặp nào có tổng bằng -5).\n\n... (Hãy dành vài giây suy nghĩ nhé) ...\n\nĐúng rồi! Cặp số đó chính là **-2** và **-3**.\n*   `(-2) * (-3) = 6` (Đúng!)\n*   `(-2) + (-3) = -5` (Đúng!)\n\nBây giờ chúng ta sẽ dùng hai số này để viết lại phương trình:\n\n**Bước 1: Tách hạng tử giữa**\nThay ` -5x ` bằng ` -2x - 3x `.\nPhương trình ban đầu: `x² - 5x + 6 = 0`\nTrở thành: `x² - 2x - 3x + 6 = 0`\n\n**Bước 2: Nhóm các hạng tử và đặt nhân tử chung**\nChúng ta sẽ nhóm hai hạng tử đầu tiên và hai hạng tử cuối cùng lại:\n`(x² - 2x) + (-3x + 6) = 0`\n\nTiếp theo, đặt nhân tử chung trong mỗi nhóm:\n*   Trong nhóm `(x² - 2x)`, nhân tử chung là `x`. Khi đặt `x` ra ngoài, ta còn lại `x(x - 2)`.\n*   Trong nhóm `(-3x + 6)`, nhân tử chung là `-3`. Khi đặt `-3` ra ngoài, ta còn lại `-3(x - 2)`. (Lưu ý: đặt `-3` để xuất hiện nhân tử `(x-2)` giống nhóm trước).\n\nVậy phương trình trở thành:\n`x(x - 2) - 3(x - 2) = 0`\n\n**Bước 3: Đặt nhân tử chung lần nữa**\nBạn có thấy rằng cả hai phần `x(x - 2)` và `-3(x - 2)` đều có chung nhân tử `(x - 2)` không?\nChúng ta sẽ đặt `(x - 2)` ra ngoài:\n`(x - 2)(x - 3) = 0`\n\n**Bước 4: Tìm nghiệm**\nKhi tích của hai thừa số bằng 0, thì ít nhất một trong hai thừa số đó phải bằng 0.\n*   Trường hợp 1: `x - 2 = 0`\n    => `x = 2`\n*   Trường hợp 2: `x - 3 = 0`\n    => `x = 3`\n\nVậy, phương trình `x² - 5x + 6 = 0` có hai nghiệm là **x₁ = 2** và **x₂ = 3**.\n\n---\n\n**Phương pháp 2: Sử dụng công thức nghiệm tổng quát (Để kiểm tra hoặc cho các bài khác)**\n\nNếu bạn muốn kiểm tra lại hoặc muốn biết cách giải bằng công thức nghiệm, chúng ta sẽ áp dụng nhé. Công thức này có thể dùng cho MỌI phương trình bậc hai.\n\nCông thức nghiệm của phương trình `ax² + bx + c = 0` là:\n`x = [-b ± sqrt(Δ)] / 2a`\nTrong đó, `Δ` (đọc là Delta, hay còn gọi là biệt thức) được tính bằng `Δ = b² - 4ac`.\n\nTừ phương trình `x² - 5x + 6 = 0`, chúng ta có: `a = 1`, `b = -5`, `c = 6`.\n\n**Bước 1: Tính Delta (Δ)**\n`Δ = b² - 4ac`\n`Δ = (-5)² - 4 * (1) * (6)`\n`Δ = 25 - 24`\n`Δ = 1`\n\n**Giải thích \"tại sao\":** Giá trị của Delta rất quan trọng vì nó cho chúng ta biết phương trình có bao nhiêu nghiệm và nghiệm đó như thế nào:\n*   Nếu `Δ > 0`: Phương trình có hai nghiệm phân biệt.\n*   Nếu `Δ = 0`: Phương trình có một nghiệm kép (hai nghiệm trùng nhau).\n*   Nếu `Δ < 0`: Phương trình vô nghiệm (trong tập số thực).\n\nVì `Δ = 1` (là số dương), nên phương trình của chúng ta sẽ có hai nghiệm phân biệt.\n\n**Bước 2: Áp dụng công thức nghiệm**\nBây giờ, chúng ta thay các giá trị `a`, `b`, `Δ` vào công thức nghiệm:\n`x₁ = [-b + sqrt(Δ)] / 2a`\n`x₁ = [-(-5) + sqrt(1)] / (2 * 1)`\n`x₁ = [5 + 1] / 2`\n`x₁ = 6 / 2`\n`x₁ = 3`\n\n`x₂ = [-b - sqrt(Δ)] / 2a`\n`x₂ = [-(-5) - sqrt(1)] / (2 * 1)`\n`x₂ = [5 - 1] / 2`\n`x₂ = 4 / 2`\n`x₂ = 2`\n\n**Kết luận:**\nCả hai phương pháp đều cho ra cùng kết quả: **x₁ = 3** và **x₂ = 2**. Điều này khẳng định kết quả của chúng ta là chính xác!\n\nBạn thấy cách nào dễ hiểu hơn? Hoặc bạn có câu hỏi nào về các bước giải vừa rồi không? Đừng ngần ngại hỏi nhé!",
+        "timestamp": "2026-03-15T20:09:28.998977"
+      },
+      {
+        "role": "user",
+        "content": "t chỉ cần đáp án thôi",
+        "timestamp": "2026-03-15T20:10:02.170606"
+      },
+      {
+        "role": "assistant",
+        "content": "Chào bạn!\n\nÀ, mình hiểu rồi, đôi khi bạn chỉ cần nhanh chóng biết kết quả thôi.\n\nVới phương trình `x² - 5x + 6 = 0`, hai nghiệm của nó là:\n**x₁ = 2**\n**x₂ = 3**\n\nNếu sau này bạn muốn xem lại cách giải chi tiết hoặc có bất kỳ câu hỏi nào khác, cứ nói với mình nhé!",
+        "timestamp": "2026-03-15T20:10:04.480641"
+      }
+    ],
+    "document_ids": [],
+    "created_at": "2026-03-15T20:09:11.325740",
+    "updated_at": "2026-03-15T20:10:04.480641"
   }
 }

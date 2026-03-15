@@ -1280,12 +1280,134 @@
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+        /* ===== HAMBURGER BUTTON ===== */
+        .hamburger-btn {
+            display: none;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            background: var(--surface2);
+            color: var(--text);
+            font-size: 18px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+        .hamburger-btn:hover { background: var(--border); }
+
+        /* Overlay khi sidebar mở trên mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 49;
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* ===== RESPONSIVE ===== */
+
+        /* Tablet: 768px - 1024px */
+        @media (max-width: 1024px) {
+            :root { --sidebar-w: 240px; }
+
+            .topbar { padding: 12px 16px; }
+            .messages-wrap { padding: 16px; }
+            .chat-input-area { padding: 12px 16px 16px; }
+            .panel-inner { padding: 20px; }
+
+            .tab-btn { padding: 7px 12px; font-size: 12px; }
+            .conv-title-display { max-width: 140px; }
+        }
+
+        /* Mobile: ≤ 768px */
+        @media (max-width: 768px) {
+            :root { --sidebar-w: 280px; }
+
+            /* Sidebar trượt từ trái, ẩn mặc định */
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 50;
+                transform: translateX(-100%);
+                box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+            }
+            .sidebar.open { transform: translateX(0); }
+
+            /* Main chiếm toàn bộ màn hình */
+            .main { width: 100%; }
+
+            /* Hiện nút hamburger */
+            .hamburger-btn { display: flex; }
+
+            /* Topbar */
+            .topbar { padding: 10px 12px; gap: 8px; }
+            .topbar-tabs { gap: 2px; overflow-x: auto; scrollbar-width: none; flex-shrink: 1; }
+            .topbar-tabs::-webkit-scrollbar { display: none; }
+
+            .tab-btn { padding: 7px 10px; font-size: 12px; white-space: nowrap; flex-shrink: 0; }
+            .conv-title-display { display: none; }
+
+            /* Chat */
+            .messages-wrap { padding: 12px; gap: 12px; }
+            .chat-input-area { padding: 10px 12px 14px; }
+
+            /* Bubbles */
+            .bubble.user .bubble-content { max-width: 85vw; }
+            .bubble.ai .bubble-content { max-width: 100%; }
+
+            /* Panel inner */
+            .panel-inner { padding: 16px; }
+            .panel-inner h2 { font-size: 17px; margin-bottom: 14px; }
+
+            /* Quiz setup - stack số câu & độ khó */
+            .quiz-setup { max-width: 100%; }
+            #panel-quiz [style*="display:flex;gap:14px"] {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            /* Quiz progress */
+            .quiz-progress-wrap { padding: 12px 14px 0; gap: 10px; }
+            .quiz-card-wrap { padding: 14px; }
+
+            /* Modal */
+            .modal { width: calc(100vw - 32px); }
+
+            /* Toast */
+            .toast { left: 16px; right: 16px; bottom: 16px; text-align: center; }
+
+            /* Doc grid */
+            .doc-grid { grid-template-columns: 1fr 1fr; }
+
+            /* Upload zone */
+            .upload-zone { padding: 28px 16px; }
+        }
+
+        /* Small mobile: ≤ 480px */
+        @media (max-width: 480px) {
+            .tab-btn { padding: 6px 8px; font-size: 11px; }
+            .doc-grid { grid-template-columns: 1fr; }
+            .bubble.user .bubble-content { max-width: 90vw; }
+            .send-btn { width: 42px; height: 42px; font-size: 16px; }
+            .quiz-card-wrap { padding: 10px; }
+            .result-hero { flex-direction: column; align-items: center; }
+        }
     </style>
 </head>
 <body>
 
+<!-- Overlay cho mobile -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
 <!-- ===== SIDEBAR ===== -->
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <div class="logo">🧮 Math<span>Bot</span></div>
         <button class="new-chat-btn" onclick="newChat()">
@@ -1308,6 +1430,7 @@
 <!-- ===== MAIN ===== -->
 <main class="main">
     <div class="topbar">
+        <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" title="Menu">☰</button>
         <div class="topbar-tabs">
             <button class="tab-btn active" onclick="showPanel('chat', this)">💬 Chat</button>
             <button class="tab-btn" onclick="showPanel('upload', this)">📄 Tài liệu</button>
@@ -1499,7 +1622,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-    const API = 'http://localhost:8000';
+    const API = '';
     let currentConvId = null;
     let uploadedDocs = [];
     let pendingDeleteId = null;
@@ -1584,6 +1707,7 @@
     }
 
     async function loadConversation(convId) {
+        autoCloseSidebarOnMobile();
         currentConvId = convId;
         document.getElementById('convTitleDisplay').textContent = '...';
 
@@ -2343,6 +2467,34 @@ correct_answer là index 0-3 (0=A, 1=B, 2=C, 3=D).`;
             showToast('❌ Lỗi xóa', 'error');
         }
     }
+
+    // ===== SIDEBAR RESPONSIVE TOGGLE =====
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const isOpen = sidebar.classList.contains('open');
+        if (isOpen) {
+            closeSidebar();
+        } else {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+        }
+    }
+
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('active');
+    }
+
+    // Đóng sidebar khi chọn một conversation trên mobile
+    function autoCloseSidebarOnMobile() {
+        if (window.innerWidth <= 768) closeSidebar();
+    }
+
+    // Đóng sidebar khi resize lên desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) closeSidebar();
+    });
 
     // ===== RENAME =====
     function openRename(e, convId, currentTitle) {

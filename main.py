@@ -6,6 +6,7 @@ import os
 import shutil
 import uuid
 from datetime import datetime
+from fastapi.staticfiles import StaticFiles
 
 from config import settings
 from models import (
@@ -51,9 +52,9 @@ documents_storage = {}
 
 # ==================== HEALTH CHECK ====================
 
-@app.get("/")
-async def root():
-    return {"message": "Math Chatbot API is running", "version": "1.0.0", "status": "healthy"}
+# @app.get("/")
+# async def root():
+#     return {"message": "Math Chatbot API is running", "version": "1.0.0", "status": "healthy"}
 
 @app.get("/health")
 async def health_check():
@@ -373,6 +374,9 @@ async def explain_concept(concept: str, document_ids: Optional[List[str]] = None
         return {"explanation": await chat_service.explain_concept(concept, document_ids)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Phục vụ giao diện web từ thư mục static
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn
